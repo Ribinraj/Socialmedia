@@ -16,10 +16,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   FutureOr<void> loginevent(
       LoginButtonClickEvent event, Emitter<LoginState> emit) async {
+         emit(LoginLoadingstate());
     String response = await SignupRepo.userlogin(
         email: event.email, password: event.password);
     debugPrint(response);
-    emit(LoginLoadingstate());
+   
     if (response == 'login successful') {
       emit(LoginSuccessState());
     } else if (response == 'User not found with the provided email') {

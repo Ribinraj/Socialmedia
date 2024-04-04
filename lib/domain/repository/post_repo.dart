@@ -22,6 +22,8 @@ class PostRepo {
         'Authorization': 'Bearer $token',
       });
       debugPrint('statuscode:${response.statusCode}');
+      debugPrint('statuscode:${response.body}');
+
       return response;
     } catch (e) {
       debugPrint(e.toString());
@@ -116,14 +118,35 @@ class PostRepo {
 
   //updatepost
   static Future<String> editpost(
-      {required AssetEntity image,
+      {required String  imageurl,
       required String description,
       required String postid}) async {
     var client = http.Client();
     try {
+      final usereditpost = {
+        'imageUrl': imageurl,
+        'description': description,
+      };
       final token = await getUserToken();
-      var response =
-          await client.put(Uri.parse('$baseurl$editposturl/$postid'));
-    } catch (e) {}
+      var response = await client.put(Uri.parse('$baseurl$editposturl/$postid'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          },
+          body: jsonEncode(usereditpost));
+      debugPrint('statuscode:${response.statusCode}');
+      debugPrint(response.body);
+      if (response.statusCode == 200) {
+        return 'Post edited Successfully';
+      } else if (response.statusCode == 500) {
+        return 'Internal Server Error';
+      } else {
+        return 'failed';
+      }
+    } catch (e) {
+       debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
   }
 }

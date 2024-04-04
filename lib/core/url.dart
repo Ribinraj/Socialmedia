@@ -9,3 +9,4 @@ String fetchposturl = '/posts/getpost';
 String fetchuserposturl = '/posts/getuserpost';
 String deleteposturl = '/posts/delete-post';
 String editposturl = '/posts/update-post';
+String loginuserurl = '/users/getuser';

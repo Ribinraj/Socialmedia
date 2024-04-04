@@ -5,9 +5,12 @@ import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
 import 'package:social_media_app/data/models/post_model.dart';
-import 'package:social_media_app/presentation/bloc/addpost/add_post_bloc.dart';
+
+import 'package:social_media_app/presentation/bloc/editbloc/edit_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/fetchuserpost/fetching_user_post_bloc.dart';
 import 'package:social_media_app/presentation/screens/add_post/widgets/mediaPicker.dart';
 import 'package:social_media_app/presentation/screens/add_post/widgets/post_textfield.dart';
+import 'package:social_media_app/presentation/widgets/cloudinary.dart';
 
 import 'package:social_media_app/presentation/widgets/custom_signin_button.dart';
 import 'package:social_media_app/presentation/widgets/custom_snakbar.dart';
@@ -23,7 +26,7 @@ class ScreenEditPost extends StatefulWidget {
 }
 
 class _ScreenAddPostState extends State<ScreenEditPost> {
-  late TextEditingController descriptioncontroller; 
+  late TextEditingController descriptioncontroller;
   List<AssetEntity> selectedAssetList = [];
 
   Future pickAssets(
@@ -41,7 +44,6 @@ class _ScreenAddPostState extends State<ScreenEditPost> {
 
   @override
   void initState() {
-    
     descriptioncontroller =
         TextEditingController(text: widget.userpost.description);
     super.initState();
@@ -50,7 +52,7 @@ class _ScreenAddPostState extends State<ScreenEditPost> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final addpostbloc = context.read<AddPostBloc>();
+    final editpostbloc = context.read<EditPostBloc>();
     return Scaffold(
       backgroundColor: kpurpleColor,
       appBar: AppBar(
@@ -58,49 +60,51 @@ class _ScreenAddPostState extends State<ScreenEditPost> {
         centerTitle: true,
         backgroundColor: kpurpleColor,
       ),
-      body: BlocConsumer<AddPostBloc, AddPostState>(
+      body: BlocListener<EditPostBloc, EditPostState>(
         listener: (context, state) {
-          if (state is AddPostSuccessState) {
-            customSnackbar(context, 'post Added Successfully', kgreencolor);
-            //  navigatePush(context, const SCreenmainpage());
-          } else if (state is AddPostErrorStateDatabaseError) {
-            customSnackbar(context, 'Database Error', kredcolor);
-          } else if (state is AddPostErrorStateInternalServerError) {
-            customSnackbar(context, 'Internal server error', kredcolor);
+          if (state is EditPostSuccessState) {
+            customSnackbar(context, 'Edited Successfully', kgreencolor);
+            Navigator.pop(context);
+            context
+                .read<FetchingUserPostBloc>()
+                .add(FetchingUserpostInitialEvent());
+          } else if (state is EditpostErrorStateInternalServerError) {
+            customSnackbar(context, 'Internal Server Error', kredcolor);
           }
         },
-        builder: (context, state) {
-          return Container(
-            width: size.width,
-            height: size.height,
-            decoration: const BoxDecoration(
-              color: kwhiteColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-              ),
+        child: Container(
+          width: size.width,
+          height: size.height,
+          decoration: const BoxDecoration(
+            color: kwhiteColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
             ),
-            child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Container(
-                    height: 600,
-                    width: size.width,
-                    decoration: BoxDecoration(
-                      borderRadius: kradius20,
-                      color: kpurpledoublelightColor,
-                      border: Border.all(width: 2, color: kpurpleBorderColor),
-                    ),
-                    child: Column(
-                      children: [
-                        kheight30,
-                        Expanded(
-                          child: PageView.builder(
-                            itemCount: selectedAssetList.isNotEmpty?selectedAssetList.length:1,
-                            itemBuilder: (context, index) {
-                              if (selectedAssetList.isNotEmpty) {
-                                final assetEntity = selectedAssetList[index];
+          ),
+          child: ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Container(
+                  height: 600,
+                  width: size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: kradius20,
+                    color: kpurpledoublelightColor,
+                    border: Border.all(width: 2, color: kpurpleBorderColor),
+                  ),
+                  child: Column(
+                    children: [
+                      kheight30,
+                      Expanded(
+                        child: PageView.builder(
+                          itemCount: selectedAssetList.isNotEmpty
+                              ? selectedAssetList.length
+                              : 1,
+                          itemBuilder: (context, index) {
+                            if (selectedAssetList.isNotEmpty) {
+                              final assetEntity = selectedAssetList[index];
                               return Stack(
                                 children: [
                                   Positioned.fill(
@@ -134,72 +138,74 @@ class _ScreenAddPostState extends State<ScreenEditPost> {
                                     )
                                 ],
                               );
-                              }else{
-                                  return Image.network(
-                                  widget.userpost.image,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Center(
-                                      child: Icon(
-                                        Icons.error,
-                                        color: kredcolor,
-                                      ),
-                                    );
+                            } else {
+                              return Image.network(
+                                widget.userpost.image,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Center(
+                                    child: Icon(
+                                      Icons.error,
+                                      color: kredcolor,
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      PostTextfield(
+                        controller: descriptioncontroller,
+                        labelText: 'Type here!',
+                      ),
+                      Container(
+                        width: size.width,
+                        height: 50,
+                        color: kpurplelightColor,
+                        child: Row(
+                          children: [
+                            const Spacer(),
+                            IconButton(
+                                onPressed: () {
+                                  pickAssets(
+                                      maxCount: 10,
+                                      requestType: RequestType.common);
+                                },
+                                icon: const Icon(
+                                  Icons.image,
+                                  color: kpurpleColor,
+                                  size: 38,
+                                )),
+                            SizedBox(
+                              height: 50,
+                              width: 220,
+                              child: CustomSigninButton(
+                                  onPressed: () async {
+                                    final String image =
+                                        selectedAssetList.isNotEmpty
+                                            ? await uploadImage(
+                                                selectedAssetList[0])
+                                            : widget.userpost.image;
+
+                                    editpostbloc.add(EditPostClickevent(
+                                        imageurl: image,
+                                        description: descriptioncontroller.text,
+                                        postid: widget.userpost.id));
                                   },
-                                );
-                              }
-                              
-                            },
-                          ),
+                                  buttonText: 'Edit Post'),
+                            )
+                          ],
                         ),
-                        PostTextfield(
-                          controller: descriptioncontroller,
-                          labelText: 'Type here!',
-                        ),
-                        Container(
-                          width: size.width,
-                          height: 50,
-                          color: kpurplelightColor,
-                          child: Row(
-                            children: [
-                              const Spacer(),
-                              IconButton(
-                                  onPressed: () {
-                                    pickAssets(
-                                        maxCount: 10,
-                                        requestType: RequestType.common);
-                                  },
-                                  icon: const Icon(
-                                    Icons.image,
-                                    color: kpurpleColor,
-                                    size: 38,
-                                  )),
-                              SizedBox(
-                                height: 50,
-                                width: 220,
-                                child: CustomSigninButton(
-                                    onPressed: () {
-                                      addpostbloc.add(
-                                        AddPostClickEvent(
-                                            image: selectedAssetList[0],
-                                            description:
-                                                descriptioncontroller.text),
-                                      );
-                                    },
-                                    buttonText: 'Edit Post'),
-                              )
-                            ],
-                          ),
-                        ),
-                        kheight30
-                      ],
-                    ),
+                      ),
+                      kheight30
+                    ],
                   ),
                 ),
-              ],
-            ),
-          );
-        },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

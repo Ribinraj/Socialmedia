@@ -96,14 +96,7 @@ class _ScreenSignupState extends State<ScreenSignup> {
                           CustomTextfield(
                               controller: phonenumberController,
                               labelText: 'Phone number',
-                              validator: (value) {
-                                if (value == null ||
-                                    value.isEmpty ||
-                                    value.length < 10) {
-                                  return 'Please enter phonenumber';
-                                }
-                                return null;
-                              },
+                              validator:validateMobileNumber,
                               textInputType: TextInputType.number),
                           CustomTextfield(
                               controller: emailController,

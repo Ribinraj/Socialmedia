@@ -18,6 +18,7 @@ void showAlertDialog(BuildContext context) {
         onPressed: () async {
           SharedPreferences preferences = await SharedPreferences.getInstance();
           preferences.setBool('LOGIN', false);
+          // ignore: use_build_context_synchronously
           navigatePushandRemoveuntil(context, const ScreenSignIn());
         },
         child: const Text("OK"),

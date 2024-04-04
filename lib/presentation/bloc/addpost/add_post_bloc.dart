@@ -16,10 +16,11 @@ class AddPostBloc extends Bloc<AddPostEvent, AddPostState> {
   }
   FutureOr<void> addpostevent(
       AddPostClickEvent event, Emitter<AddPostState> emit) async {
+        emit(AddPostLoadingstate());
     String response = await PostRepo.addpost(
         image: event.image, description: event.description);
     debugPrint(response);
-    emit(AddPostLoadingstate());
+    
     if (response == 'post created successfully') {
       emit(AddPostSuccessState());
     } else if (response ==

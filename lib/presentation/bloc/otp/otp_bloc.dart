@@ -1,7 +1,9 @@
 import 'dart:async';
 
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
+// ignore: depend_on_referenced_packages
 import 'package:meta/meta.dart';
 import 'package:social_media_app/domain/repository/signup_repo.dart';
 
@@ -16,7 +18,7 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
 
   FutureOr<void> otpEvent(
       OtpverifyClickevent event, Emitter<OtpState> emit) async {
-    final response = await SignupRepo.verifyOtp(email: event.email, Otp: event.otp);
+    final response = await SignupRepo.verifyOtp(email: event.email, oteepee: event.otp);
     emit(OtpLoadingState());
     if (response == 'successful') {
       emit(OtpSuccessState());

@@ -19,8 +19,9 @@ class FetchPostBloc extends Bloc<FetchPostEvent, FetchPostState> {
 
   FutureOr<void> fetchpostevent(
       FetchPostInitialEvent event, Emitter<FetchPostState> emit) async {
+ emit(FetchPostLoadingState());
     final Response response = await PostRepo.fetchPost();
-    emit(FetchPostLoadingState());
+   
 
     List<Postmodel> posts = [];
     if (response.statusCode == 200) {

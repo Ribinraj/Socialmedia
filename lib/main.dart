@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/presentation/bloc/addpost/add_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/deletepost/delete_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/editbloc/edit_post_bloc.dart';
 
 import 'package:social_media_app/presentation/bloc/fetchpost/fetch_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/fetchuserpost/fetching_user_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/imagepicker/image_picker_bloc.dart';
 import 'package:social_media_app/presentation/bloc/login/login_bloc.dart';
+import 'package:social_media_app/presentation/bloc/login_user/login_user_bloc.dart';
 import 'package:social_media_app/presentation/bloc/otp/otp_bloc.dart';
 import 'package:social_media_app/presentation/bloc/signup/signup_bloc.dart';
 import 'package:social_media_app/presentation/cubit/bottomnav_cubit/bottonav_cubit.dart';
@@ -44,7 +47,18 @@ class MyApp extends StatelessWidget {
         ),BlocProvider(create: (context)=>FetchingUserPostBloc()),
         BlocProvider(
           create: (context) => DeletePostBloc(),
-          child: Container(),
+          
+        ),
+        BlocProvider(
+          create: (context) => EditPostBloc(),
+       
+        ),
+         BlocProvider(
+          create: (context) => LoginUserBloc(),
+       
+        ),BlocProvider(
+          create: (context) =>ImagePickerBloc(),
+          
         )
       ],
       child: MaterialApp(

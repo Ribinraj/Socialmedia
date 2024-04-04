@@ -47,7 +47,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
     } else {
       await Future.delayed(const Duration(seconds: 3));
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => SCreenmainpage(),
+        builder: (context) => const SCreenmainpage(),
       ));
     }
   }

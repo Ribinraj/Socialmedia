@@ -124,6 +124,7 @@ class _MediaPickerState extends State<MediaPicker> {
                 isOriginal: false,
                 thumbnailSize: const ThumbnailSize.square(250),
                 fit: BoxFit.cover,
+                // ignore: avoid_types_as_parameter_names
                 errorBuilder: (context, error, StackTrace) {
                   return const Center(
                     child: Icon(

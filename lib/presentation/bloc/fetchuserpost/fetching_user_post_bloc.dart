@@ -19,9 +19,10 @@ class FetchingUserPostBloc
 
   FutureOr<void> fetchuserpost(FetchingUserpostInitialEvent event,
       Emitter<FetchingUserPostState> emit) async {
+         emit(FetchUserPostLoadingState());
     final Response response = await PostRepo.fetchuserpost();
     final responsebody = jsonDecode(response.body);
-    emit(FetchUserPostLoadingState());
+   
     List<Postmodel> userposts = [];
     if (response.statusCode == 200) {
       final List<dynamic> responsedata = jsonDecode(response.body);

@@ -23,3 +23,18 @@ String? validatePassword(String? password) {
 
   return null;
 }
+
+//phonenumber
+String? validateMobileNumber(String? number) {
+  if (number == null || number.isEmpty) {
+    return 'Please enter a mobile number.';
+  }
+
+  final regex = RegExp(r'^\d{10}$');
+
+  if (!regex.hasMatch(number)) {
+    return 'Invalid mobile number format.';
+  }
+
+  return null;
+}

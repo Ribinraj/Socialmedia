@@ -38,10 +38,10 @@ class SignupRepo {
 
   //otp
   static Future<String> verifyOtp(
-      {required String email, required String Otp}) async {
+      {required String email, required String oteepee}) async {
     var client = http.Client();
     try {
-      final user = {'email': email, 'otp': Otp};
+      final user = {'email': email, 'otp': oteepee};
 
       var response = await client.post(
         Uri.parse('$baseurl$otpurl'),
