@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:bloc/bloc.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
-import 'package:meta/meta.dart';
+
 import 'package:social_media_app/data/models/post_model.dart';
 import 'package:social_media_app/domain/repository/post_repo.dart';
 
@@ -20,7 +22,7 @@ class FetchingUserPostBloc
   FutureOr<void> fetchuserpost(FetchingUserpostInitialEvent event,
       Emitter<FetchingUserPostState> emit) async {
          emit(FetchUserPostLoadingState());
-    final Response response = await PostRepo.fetchuserpost();
+    final Response response = await PostRepo.fetchuserpost(userid:event.userId);
     final responsebody = jsonDecode(response.body);
    
     List<Postmodel> userposts = [];

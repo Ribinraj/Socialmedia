@@ -4,12 +4,13 @@ part of 'edit_post_bloc.dart';
 sealed class EditPostEvent {}
 
 final class EditPostClickevent extends EditPostEvent {
-  final String imageurl;
+  final File? image;
+  final String? imageurl;
   final String description;
   final String postid;
 
-  EditPostClickevent(
-      {required this.imageurl,
+  EditPostClickevent( 
+      {this.image, this.imageurl,
       required this.description,
       required this.postid});
 }

@@ -6,7 +6,13 @@ sealed class ImagePickerState {}
 final class ImagePickerInitial extends ImagePickerState {}
 
 final class ImagePickedState extends ImagePickerState {
-  final String image;
+  final File image;
 
   ImagePickedState({required this.image});
+}
+
+final class BackgroundImagePickedstate extends ImagePickerState {
+  final File backgroundimage;
+
+  BackgroundImagePickedstate({required this.backgroundimage});
 }

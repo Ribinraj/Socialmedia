@@ -3,27 +3,16 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 
-// Future<void> uploadImage() async {
-//   final url = Uri.parse('https://api.cloudinary.com/v1_1/dzud1uwiw/upload');
-//   final request = http.MultipartRequest('POST', url)
-//     ..fields['upload_preset'] = 'ukbgssk3'
-//     ..fields.add(await http.MultipartFile.fromPath('file', _imageFile!.path));
-//   final response = await request.send();
-//   if (response.statusCode == 200) {
-//     final responseData = await response.stream.toBytes();
-//     final responseString = String.fromCharCode(responseData);
 
-//   }
-// }
 Future uploadImage(image) async {
   final url = Uri.parse('https://api.cloudinary.com/v1_1/dzud1uwiw/upload');
-  final file =await image.file;
+  // final file =await image.file;
   try {
     final request = http.MultipartRequest('POST', url)
       ..fields['upload_preset'] = 'ukbgssk3'
       ..files.add(await http.MultipartFile.fromPath(
         'file',
-        file!.path,
+        image!.path,
       ));
     final response = await request.send();
     if (response.statusCode == 200) {

@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
 import 'package:social_media_app/presentation/bloc/deletepost/delete_post_bloc.dart';
 
 import 'package:social_media_app/presentation/bloc/fetchuserpost/fetching_user_post_bloc.dart';
-import 'package:social_media_app/presentation/screens/editpost/sreen_editpost.dart';
-import 'package:social_media_app/presentation/widgets/custom_navigator.dart';
+
+import 'package:social_media_app/presentation/screens/user_post/widgets/popupmenu_button.dart';
+
 import 'package:social_media_app/presentation/widgets/custom_round_image.dart';
 import 'package:social_media_app/presentation/widgets/custom_snakbar.dart';
 import 'package:social_media_app/presentation/widgets/tex.dart';
 
 class SreenUserPost extends StatefulWidget {
-  const SreenUserPost({super.key});
+  final String userId;
+  const SreenUserPost({super.key, required this.userId});
 
   @override
   State<SreenUserPost> createState() => _SreenUserPostState();
@@ -21,7 +24,8 @@ class SreenUserPost extends StatefulWidget {
 class _SreenUserPostState extends State<SreenUserPost> {
   @override
   void initState() {
-    context.read<FetchingUserPostBloc>().add(FetchingUserpostInitialEvent());
+    context.read<FetchingUserPostBloc>().add(FetchingUserpostInitialEvent(userId: widget.userId));
+    // context.read<FetchPostBloc>().add(FetchPostInitialEvent());
     super.initState();
   }
 
@@ -39,9 +43,10 @@ class _SreenUserPostState extends State<SreenUserPost> {
       body: BlocListener<DeletePostBloc, DeletePostState>(
         listener: (context, state) {
           if (state is DeletePostSuccessState) {
+            // context.read<FetchPostBloc>().add(FetchPostInitialEvent());
             context
                 .read<FetchingUserPostBloc>()
-                .add(FetchingUserpostInitialEvent());
+                .add(FetchingUserpostInitialEvent(userId: widget.userId));
             customSnackbar(context, 'deleted Successfully', kgreencolor);
           } else if (state is DeletePostInternalServerErrorState) {
             customSnackbar(context, 'internal server error', kredcolor);
@@ -51,11 +56,9 @@ class _SreenUserPostState extends State<SreenUserPost> {
           listener: (context, state) {},
           builder: (context, state) {
             if (state is FetchUserPostLoadingState) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: kpurpleBorderColor,
-                ),
-              );
+              return Center(
+                  child: LoadingAnimationWidget.fourRotatingDots(
+                      color: kpurpleMediumColor, size: 40));
             } else if (state is FetchUserPostSuccessState) {
               return ListView.separated(
                 shrinkWrap: true,
@@ -71,7 +74,7 @@ class _SreenUserPostState extends State<SreenUserPost> {
                         left: 5,
                         right: 5,
                       ),
-                      height: 550,
+                      height: 520,
                       width: double.infinity,
                       decoration: BoxDecoration(
                           color: kpurpledoublelightColor,
@@ -81,10 +84,10 @@ class _SreenUserPostState extends State<SreenUserPost> {
                         children: [
                           Row(
                             children: [
-                              const CustomRoundImage(
+                              CustomRoundImage(
                                   circleContainerSize: 45,
                                   imageUrl:
-                                      "https://i.pinimg.com/736x/d0/4b/1f/d04b1f2ed3ca8ad4a302fbe9f4f5a875.jpg"),
+                                      state.userposts[index].userId.profilePic),
                               kwidth,
                               Column(
                                 children: [
@@ -98,36 +101,16 @@ class _SreenUserPostState extends State<SreenUserPost> {
                                 ],
                               ),
                               const Spacer(),
-                              PopupMenuButton(
-                                itemBuilder: (BuildContext context) =>
-                                    <PopupMenuEntry>[
-                                  const PopupMenuItem(
-                                    value: 'edit',
-                                    child: Text('Edit'),
-                                  ),
-                                  const PopupMenuItem(
-                                    value: 'delete',
-                                    child: Text('Delete'),
-                                  ),
-                                ],
-                                onSelected: (value) {
-                                  // Handle the selected option here
-                                  if (value == 'edit') {
-                                    navigatePush(
-                                        context,  ScreenEditPost(userpost: state.userposts[index],));
-                                  } else if (value == 'delete') {
-                                    deletoepostBloc.add(DeletepostClickEvent(
-                                        postid: state.userposts[index].id));
-                                  }
-                                },
-                                icon: const Icon(Icons.more_vert),
-                              ),
+                              PopupmenuButton(
+                                  deletoepostBloc: deletoepostBloc,
+                                  state: state,
+                                  index: index)
                             ],
                           ),
                           kheight,
                           Container(
                             width: size.width,
-                            height: 370,
+                            height: 340,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                   fit: BoxFit.cover,

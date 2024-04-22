@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
 import 'package:social_media_app/presentation/bloc/addpost/add_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/fetchpost/fetch_post_bloc.dart';
 import 'package:social_media_app/presentation/screens/add_post/widgets/mediaPicker.dart';
+import 'package:social_media_app/presentation/screens/add_post/widgets/pageview.dart';
 import 'package:social_media_app/presentation/screens/add_post/widgets/post_textfield.dart';
-
-
+import 'package:social_media_app/presentation/screens/main_page/screen_main_page.dart';
 
 import 'package:social_media_app/presentation/widgets/custom_signin_button.dart';
 import 'package:social_media_app/presentation/widgets/custom_snakbar.dart';
@@ -53,15 +54,27 @@ class _ScreenAddPostState extends State<ScreenAddPost> {
       body: BlocConsumer<AddPostBloc, AddPostState>(
         listener: (context, state) {
           if (state is AddPostSuccessState) {
+            context.read<FetchPostBloc>().add(FetchPostInitialEvent());
             customSnackbar(context, 'post Added Successfully', kgreencolor);
-            //  navigatePush(context, const SCreenmainpage());
           } else if (state is AddPostErrorStateDatabaseError) {
             customSnackbar(context, 'Database Error', kredcolor);
           } else if (state is AddPostErrorStateInternalServerError) {
             customSnackbar(context, 'Internal server error', kredcolor);
           }
+          currentPage.value = 0;
         },
         builder: (context, state) {
+          if (state is AddPostLoadingstate) {
+            return Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: kpurplelightColor,
+              child: Center(
+                child: LoadingAnimationWidget.fourRotatingDots(
+                    color: kpurpleMediumColor, size: 40),
+              ),
+            );
+          }
           return Container(
             width: size.width,
             height: size.height,
@@ -88,45 +101,8 @@ class _ScreenAddPostState extends State<ScreenAddPost> {
                       children: [
                         kheight30,
                         Expanded(
-                          child: PageView.builder(
-                            itemCount: selectedAssetList.length,
-                            itemBuilder: (context, index) {
-                              final assetEntity = selectedAssetList[index];
-                              return Stack(
-                                children: [
-                                  Positioned.fill(
-                                    child: AssetEntityImage(
-                                      assetEntity,
-                                      isOriginal: false,
-                                      fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                        return const Center(
-                                          child: Icon(
-                                            Icons.error,
-                                            color: kredcolor,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  if (assetEntity.type == AssetType.video)
-                                    const Positioned(
-                                      child: Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Padding(
-                                          padding: EdgeInsets.all(10),
-                                          child: Icon(
-                                            Icons.image,
-                                            color: kredcolor,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                ],
-                              );
-                            },
-                          ),
+                          child: PageviewInAddpost(
+                              selectedAssetList: selectedAssetList),
                         ),
                         PostTextfield(
                           controller: descriptioncontroller,
@@ -161,7 +137,8 @@ class _ScreenAddPostState extends State<ScreenAddPost> {
                                             description:
                                                 descriptioncontroller.text),
                                       );
-
+                                      descriptioncontroller.clear();
+                                      selectedAssetList.clear();
                                     },
                                     buttonText: 'Add Post'),
                               )
