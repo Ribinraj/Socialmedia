@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/presentation/bloc/add_comment/add_comment_bloc.dart';
+
 import 'package:social_media_app/presentation/bloc/addpost/add_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/cmment_delete/comment_delete_bloc.dart';
+
 import 'package:social_media_app/presentation/bloc/deletepost/delete_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/editbloc/edit_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/editprofile/edit_profile_bloc.dart';
@@ -64,14 +68,20 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => EditProfileBloc(),
         ),
-          BlocProvider(
+        BlocProvider(
           create: (context) => FetchFollowerspostBloc(),
         ),
-         BlocProvider(
+        BlocProvider(
           create: (context) => LikeUnlikePostBloc(),
         ),
-           BlocProvider(
+        BlocProvider(
           create: (context) => FetchCommentBloc(),
+        ),
+        BlocProvider(
+          create: (context) => AddCommentBloc(),
+        ),
+           BlocProvider(
+          create: (context) => CommentDeleteBloc(),
         ),
       ],
       child: MaterialApp(

@@ -247,25 +247,33 @@ class PostRepo {
 
   //add comment
   static Future<String> addcomments(
-      {required String userName,
+      {required String userId,
+      required String userName,
       required String postId,
       required String content}) async {
     var client = http.Client();
     try {
-      final userId = await getUserId();
+      // final userId = await getUserId();
       final token = await getUserToken();
       final commentData = {
         'userId': userId,
         'userName': userName,
-        ' postId': postId,
+        'postId': postId,
         'content': content
       };
-      var response = await client
-          .post(Uri.parse('$baseurl$addcommenturl/$postId'), headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token'
-      },
-        body: jsonEncode(commentData));
+      
+        debugPrint(userName);
+        debugPrint(userId);
+        debugPrint(postId);
+        debugPrint(content);
+
+      var response = await client.post(
+          Uri.parse('$baseurl$addcommenturl/$postId'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          },
+          body: jsonEncode(commentData));
       debugPrint('statuscode:${response.statusCode}');
       if (response.statusCode == 200) {
         return 'comment added successfully';
@@ -280,4 +288,30 @@ class PostRepo {
       return 'failed';
     }
   }
+  //deletecomment
+    static Future<String> deletecomment({required String commentid}) async {
+  
+    var client = http.Client();
+    try {
+      final token = await getUserToken();
+      var response = await client
+          .delete(Uri.parse('$baseurl$deletecommenturl/$commentid'), headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
+      debugPrint('statuscode:${response.statusCode}');
+      if (response.statusCode == 200) {
+        return 'comment deleted successfully';
+      } else if (response.statusCode == 500) {
+        return 'internal server error';
+      } else {
+        return 'failed';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
+
 }

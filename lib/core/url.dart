@@ -16,3 +16,4 @@ String postlikeurl = '/posts/like-post';
 String postunlikeurl = '/posts/unlike-post';
 String fetchcommentsurl = '/posts/fetch-comments';
 String addcommenturl = '/posts/add-comment';
+String deletecommenturl = '/posts/delete-comment';

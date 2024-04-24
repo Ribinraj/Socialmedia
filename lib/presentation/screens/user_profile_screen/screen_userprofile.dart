@@ -1,6 +1,7 @@
 import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
 import 'package:social_media_app/presentation/bloc/fetchpost/fetch_post_bloc.dart';
@@ -8,10 +9,11 @@ import 'package:social_media_app/presentation/bloc/fetchpost/fetch_post_bloc.dar
 import 'package:social_media_app/presentation/bloc/login_user/login_user_bloc.dart';
 
 import 'package:social_media_app/presentation/screens/profile_screen/profile_screen.dart';
-import 'package:social_media_app/presentation/screens/user_post/sreen_userpost.dart';
+
+import 'package:social_media_app/presentation/screens/user_profile_screen/widgets/allpost_widget.dart';
 
 import 'package:social_media_app/presentation/screens/user_profile_screen/widgets/editprofile_settings_row.dart';
-import 'package:social_media_app/presentation/widgets/custom_navigator.dart';
+
 
 import 'package:social_media_app/presentation/widgets/tex.dart';
 
@@ -28,11 +30,10 @@ class _ScreenUserProfileState extends State<ScreenUserProfile>
   @override
   void initState() {
     super.initState();
-     _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     context.read<FetchPostBloc>().add(FetchPostInitialEvent());
     context.read<LoginUserBloc>().add(LoginUserInitialFetchingEvent());
     // context.read<FetchingUserPostBloc>().add(FetchingUserpostInitialEvent());
-   
   }
 
   @override
@@ -51,11 +52,9 @@ class _ScreenUserProfileState extends State<ScreenUserProfile>
                     listener: (context, state1) {},
                     builder: (context, state1) {
                       if (state1 is LoginUserLoadingState) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: kpurpleBorderColor,
-                          ),
-                        );
+                        return Center(
+                            child: LoadingAnimationWidget.fourRotatingDots(
+                                color: kpurpleMediumColor, size: 40));
                       } else if (state1 is LoginUserSuccessState) {
                         return Stack(
                           children: [
@@ -199,75 +198,40 @@ class _ScreenUserProfileState extends State<ScreenUserProfile>
                       Tab(text: 'Saved Posts'),
                     ],
                   ),
-                  AutoScaleTabBarView(
-                    controller: _tabController,
-                    children: [
-                      BlocBuilder<FetchPostBloc, FetchPostState>(
-                        builder: (context, state) {
-                          if (state is FetchPostLoadingState) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                color: kpurpleBorderColor,
-                              ),
-                            );
-                          } else if (state is FetchPostSuccessState) {
-                            print('hii ${state.posts.length}');
-                            return GridView.builder(
+                  BlocBuilder<FetchPostBloc, FetchPostState>(
+                    builder: (context, state) {
+                      if (state is FetchPostLoadingState) {
+                        return Center(
+                            child: LoadingAnimationWidget.fourRotatingDots(
+                                color: kpurpleMediumColor, size: 40));
+                      } else if (state is FetchPostSuccessState) {
+                        return AutoScaleTabBarView(
+                          controller: _tabController,
+                          children: [
+                             AllpostWidget(state: state,),
+                            GridView.builder(
                               physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                crossAxisSpacing: 5,
-                                mainAxisSpacing: 5,
+                                crossAxisCount:
+                                    3, // Adjust for desired number of columns
+                                crossAxisSpacing: 5.0,
+                                mainAxisSpacing: 5.0,
                               ),
-                              padding: const EdgeInsets.all(5),
-                              shrinkWrap: true,
-                              itemCount: state.posts.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    navigatePush(
-                                        context,
-                                        SreenUserPost(
-                                          userId: state.posts[index].userId.id,
-                                        ));
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                          state.posts[index].image,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  color: kpurpleColor,
                                 );
                               },
-                            );
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
-                      ),
-                      GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount:
-                              3, // Adjust for desired number of columns
-                          crossAxisSpacing: 5.0,
-                          mainAxisSpacing: 5.0,
-                        ),
-                        itemBuilder: (context, index) {
-                          return Container(
-                            color: kpurpleColor,
-                          );
-                        },
-                        itemCount: 10,
-                      ),
-                    ],
+                              itemCount: 10,
+                            ),
+                          ],
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
                   ),
                 ],
               ),
@@ -278,3 +242,5 @@ class _ScreenUserProfileState extends State<ScreenUserProfile>
     );
   }
 }
+
+

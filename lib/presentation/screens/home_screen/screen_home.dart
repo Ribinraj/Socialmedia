@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/data/models/followers_post.dart';
+
 import 'package:social_media_app/presentation/bloc/followerspost/fetch_followerspost_bloc.dart';
 import 'package:social_media_app/presentation/bloc/like_unlikepost/like_unlike_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/login_user/login_user_bloc.dart';
+import 'package:social_media_app/presentation/screens/home_screen/widgets/favourit_section.dart';
 
-import 'package:social_media_app/presentation/screens/home_screen/widgets/comment_sheet.dart';
+import 'package:social_media_app/presentation/screens/home_screen/widgets/comment_section.dart';
 import 'package:social_media_app/presentation/screens/home_screen/widgets/shimmer_homepage.dart';
 
 import 'package:timeago/timeago.dart' as timeago;
@@ -191,21 +192,23 @@ class _ScreenHomeState extends State<ScreenHome> {
                                                 18,
                                                 textColor: kblackColor,
                                                 fontWeight: FontWeight.bold),
-                                            customstyletext(
-                                                timeago.format(state
-                                                    .followersposts[index]
-                                                    .createdAt),
-                                                15,
-                                                textColor: kgreycolor)
+                                            state.followersposts[index]
+                                                        .createdAt !=
+                                                    state.followersposts[index]
+                                                        .updatedAt
+                                                ? customstyletext(
+                                                    '${timeago.format(state.followersposts[index].updatedAt)}(edited)',
+                                                    13,
+                                                    textColor: kgreycolor)
+                                                : customstyletext(
+                                                    timeago.format(state
+                                                        .followersposts[index]
+                                                        .createdAt),
+                                                    13,
+                                                    textColor: kgreycolor),
                                           ],
                                         ),
                                         kwidth30,
-                                        state.followersposts[index].createdAt !=
-                                                state.followersposts[index]
-                                                    .updatedAt
-                                            ? customstyletext('Edited', 15,
-                                                textColor: kgreycolor)
-                                            : const SizedBox(),
                                         const Spacer(),
                                         PopupMenuButton<String>(
                                           onSelected: (value) {
@@ -258,58 +261,13 @@ class _ScreenHomeState extends State<ScreenHome> {
                                         if (state2 is LoginUserSuccessState) {
                                           return Row(
                                             children: [
-                                              IconButton(
-                                                  onPressed: () {
-                                                    if (state
-                                                            .followersposts[
-                                                                index]
-                                                            .isLiked ==
-                                                        false) {
-                                                      state
-                                                          .followersposts[index]
-                                                          .isLiked = true;
-                                                      state
-                                                          .followersposts[index]
-                                                          .likes
-                                                          .add(UserId.fromJson(
-                                                              state2
-                                                                  .loginuserdata
-                                                                  .toJson()));
-                                                      likebloc.add(LikepostEvent(
-                                                          postid: state
-                                                              .followersposts[
-                                                                  index]
-                                                              .id));
-                                                    } else {
-                                                      state
-                                                          .followersposts[index]
-                                                          .isLiked = false;
-                                                      state
-                                                          .followersposts[index]
-                                                          .likes
-                                                          .removeWhere((element) =>
-                                                              element.id ==
-                                                              state2
-                                                                  .loginuserdata
-                                                                  .id);
-                                                      likebloc.add(
-                                                          UnlikePostEvent(
-                                                              postid: state
-                                                                  .followersposts[
-                                                                      index]
-                                                                  .id));
-                                                    }
-                                                  },
-                                                  icon: Icon(Icons.favorite,
-                                                      color: state
-                                                                  .followersposts[
-                                                                      index]
-                                                                  .isLiked ==
-                                                              true
-                                                          ? kredcolor
-                                                          : kwhiteColor)),
+                                              FavouriteSection(
+                                                  state: state,
+                                                  index: index,
+                                                  state2: state2,
+                                                  likebloc: likebloc),
                                               customHeadingtext(
-                                                  '${state.followersposts[index].likes.length} ',
+                                                  '${state.followersposts[index].likes.length}',
                                                   15,
                                                   fontWeight: FontWeight.w500,
                                                   textColor: kblackColor),
@@ -323,37 +281,11 @@ class _ScreenHomeState extends State<ScreenHome> {
                                                       'Like', 15,
                                                       textColor: kblackColor),
                                               kwidth,
-                                              IconButton(
-                                                  onPressed: () {
-                                                    showModalBottomSheet(
-                                                      context: context,
-                                                      isScrollControlled:
-                                                          true, // Enable scrolling
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return DraggableScrollableSheet(
-                                                          initialChildSize:
-                                                              0.5, // Set initial size of the sheet
-                                                          minChildSize:
-                                                              0.25, // Set minimum size of the sheet
-                                                          maxChildSize:
-                                                              1.0, // Set maximum size of the sheet
-                                                          expand: false,
-                                                          builder: (BuildContext
-                                                                  context,
-                                                              ScrollController
-                                                                  scrollController) {
-                                                            return CommentPage(
-                                                                scrollController:
-                                                                    scrollController,postId: state.followersposts[index].id,);
-                                                            // Pass the scroll controller to your CommentPage widget if needed
-                                                          },
-                                                        );
-                                                      },
-                                                    );
-                                                  },
-                                                  icon: const Icon(
-                                                      Icons.comment)),
+                                              CommentWidget(
+                                                index: index,
+                                                state2: state2,
+                                                state: state,
+                                              ),
                                             ],
                                           );
                                         }
@@ -380,6 +312,9 @@ class _ScreenHomeState extends State<ScreenHome> {
     );
   }
 }
+
+
+
 //class MainCardContainer extends StatelessWidget {
 //   const MainCardContainer({
 //     super.key,
