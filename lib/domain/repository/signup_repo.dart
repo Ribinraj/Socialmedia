@@ -84,6 +84,7 @@ class SignupRepo {
         preferences.setBool('LOGIN', true);
         preferences.setString('USER_TOKEN', responsebody['user']['token']);
         preferences.setString('USER_ID', responsebody['user']['_id']);
+         preferences.setString('USER_NAME', responsebody['user']['userName']);
         return 'login successful';
       } else if (responsebody['message'] ==
           'User not found with the provided email') {

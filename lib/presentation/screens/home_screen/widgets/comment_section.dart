@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/presentation/bloc/followerspost/fetch_followerspost_bloc.dart';
+
 import 'package:social_media_app/presentation/bloc/login_user/login_user_bloc.dart';
 import 'package:social_media_app/presentation/screens/home_screen/widgets/comment_sheet.dart';
 
@@ -7,12 +7,12 @@ class CommentWidget extends StatelessWidget {
   const CommentWidget({
     super.key,
     required this.state2,
-    required this.index,
-    required this.state,
+   required this.postId,
   });
-  final FetchFollowersSuccessState state;
+
   final LoginUserSuccessState state2;
-  final int index;
+  
+  final String postId;
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -30,7 +30,7 @@ class CommentWidget extends StatelessWidget {
                     (BuildContext context, ScrollController scrollController) {
                   return CommentPage(
                     scrollController: scrollController,
-                    postId: state.followersposts[index].id,
+                    postId:postId,
                     state2: state2,
                   );
                 },

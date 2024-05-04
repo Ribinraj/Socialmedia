@@ -261,11 +261,6 @@ class PostRepo {
         'postId': postId,
         'content': content
       };
-      
-        debugPrint(userName);
-        debugPrint(userId);
-        debugPrint(postId);
-        debugPrint(content);
 
       var response = await client.post(
           Uri.parse('$baseurl$addcommenturl/$postId'),
@@ -288,9 +283,9 @@ class PostRepo {
       return 'failed';
     }
   }
+
   //deletecomment
-    static Future<String> deletecomment({required String commentid}) async {
-  
+  static Future<String> deletecomment({required String commentid}) async {
     var client = http.Client();
     try {
       final token = await getUserToken();
@@ -314,4 +309,269 @@ class PostRepo {
     }
   }
 
+//save post
+  static Future<String> savepost({required String postId}) async {
+    var client = http.Client();
+    try {
+      final token = await getUserToken();
+      var response = await client
+          .post(Uri.parse('$baseurl$saveposturl/$postId'), headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
+      debugPrint('statuscode:${response.statusCode}');
+      if (response.statusCode == 200) {
+        return 'data saved successfully';
+      } else if (response.statusCode == 500) {
+        return 'internal server error';
+      } else {
+        return 'failed';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
+
+  //unsaved post
+  static Future<String> unsavepost({required String postId}) async {
+    var client = http.Client();
+    try {
+      final token = await getUserToken();
+      var response = await client
+          .delete(Uri.parse('$baseurl$unsaveposturl/$postId'), headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
+      debugPrint('statuscode:${response.statusCode}');
+      if (response.statusCode == 200) {
+        return 'post unsaved Successfully';
+      } else if (response.statusCode == 500) {
+        return 'internal server error';
+      } else {
+        return 'failed';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
+
+  //report post
+  static Future<String> reportpost(
+      {required String postId, required String reportType}) async {
+    var client = http.Client();
+    try {
+      final token = await getUserToken();
+      final reporterId = await getUserId();
+      final reporterUsername = await getUsername();
+      final reportdata = {
+        'reporterId': reporterId,
+        'reporterUsername': reporterUsername,
+        'reportType': reportType,
+        'targetId': postId
+      };
+      var response = await client.post(
+          Uri.parse('$baseurl$reportposturl/$postId'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          },
+          body: jsonEncode(reportdata));
+      debugPrint('statuscode:${response.statusCode}');
+      if (response.statusCode == 200) {
+        return 'post reported Successfully';
+      } else if (response.statusCode == 500) {
+        return 'Internal Server error';
+      } else {
+        return 'failed';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
+
+  //fetchsavedpost
+  static Future fetchsavedpost() async {
+    var client = http.Client();
+    final token = await getUserToken();
+    try {
+      var respose = await client.get(Uri.parse('$baseurl$savedposturl'),
+          headers: {
+            'content_Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          });
+      debugPrint('statuscode:${respose.statusCode}');
+      return respose;
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
+
+  //suggession
+  static Future fetchsuggestion() async {
+    var client = http.Client();
+    final token = await getUserToken();
+    try {
+      var response = await client.get(Uri.parse('$baseurl$suggessionurl'),
+          headers: {
+            'content_Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          });
+      debugPrint('statuscode:${response.statusCode}');
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
+
+  //followpost
+  static Future<String> followuser({required String followeeId}) async {
+    var client = http.Client();
+    try {
+      final token = await getUserToken();
+      var response = await client
+          .post(Uri.parse('$baseurl$followuserurl/$followeeId'), headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
+      debugPrint('statuscode:${response.statusCode}');
+      if (response.statusCode == 200) {
+        return 'followed Successfully';
+      } else if (response.statusCode == 500) {
+        return 'internal server error';
+      } else {
+        return 'failed';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
+
+  //unfollow user
+  static Future<String> unfollowuser({required String unfolloweeId}) async {
+    var client = http.Client();
+    try {
+      final token = await getUserToken();
+      debugPrint('unfolloweeid:$unfolloweeId');
+      var response = await client
+          .put(Uri.parse('$baseurl$unfollowuserurl/$unfolloweeId'), headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
+      debugPrint('statuscodeunfollow:${response.statusCode}');
+      if (response.statusCode == 200) {
+        return 'unfollowed Successfully';
+      } else if (response.statusCode == 500) {
+        return 'internal server error';
+      } else {
+        return 'failed';
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
+
+  //isfollowing
+  static Future isfollowing({required String userId}) async {
+    var client = http.Client();
+    try {
+      final token = await getUserToken();
+      var response = await client
+          .get(Uri.parse('$baseurl$isfollowingurl/$userId'), headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
+      debugPrint('statuscode:${response.statusCode}');
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
+  //fetchfollowers
+    static Future fetchfollowers() async {
+    var client = http.Client();
+    final token = await getUserToken();
+    try {
+      var respose = await client.get(Uri.parse('$baseurl$fetchfollowersurl'),
+          headers: {
+            'content_Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          });
+      debugPrint('statuscode:${respose.statusCode}');
+      return respose;
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
+//fetchfollowing
+  static Future fetchfollowing() async {
+    var client = http.Client();
+    final token = await getUserToken();
+    try {
+      var respose = await client.get(Uri.parse('$baseurl$fetchfollowingurl'),
+          headers: {
+            'content_Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          });
+      debugPrint('statuscode:${respose.statusCode}');
+      return respose;
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
+//fetchexplorepost
+  static Future fetchexplorepost() async {
+    var client = http.Client();
+    final token = await getUserToken();
+    try {
+      var respose = await client.get(Uri.parse('$baseurl$exploreposturl'),
+          headers: {
+            'content_Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          });
+      debugPrint('statuscode:${respose.statusCode}');
+      return respose;
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
+  //searchusers
+    static Future searchusers({required String searchquery}) async {
+    var client = http.Client();
+    final token = await getUserToken();
+    try {
+      var respose = await client.get(Uri.parse('$baseurl$searchusersurl$searchquery'),
+          headers: {
+            'content_Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          });
+      debugPrint('statuscode:${respose.statusCode}');
+      return respose;
+    } catch (e) {
+      debugPrint(e.toString());
+      log(e.toString());
+      return 'failed';
+    }
+  }
 }

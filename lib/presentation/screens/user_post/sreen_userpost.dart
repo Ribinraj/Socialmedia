@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:multi_bloc_builder/builders/multi_bloc_builder.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
 import 'package:social_media_app/presentation/bloc/deletepost/delete_post_bloc.dart';
 
 import 'package:social_media_app/presentation/bloc/fetchuserpost/fetching_user_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/like_unlikepost/like_unlike_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/login_user/login_user_bloc.dart';
+import 'package:social_media_app/presentation/screens/home_screen/widgets/comment_section.dart';
+import 'package:social_media_app/presentation/screens/user_post/widgets/favorite.dart';
+
 
 import 'package:social_media_app/presentation/screens/user_post/widgets/popupmenu_button.dart';
 
@@ -31,6 +37,7 @@ class _SreenUserPostState extends State<SreenUserPost> {
 
   @override
   Widget build(BuildContext context) {
+    final likebloc = context.read<LikeUnlikePostBloc>();
     Size size = MediaQuery.of(context).size;
     final deletoepostBloc = context.read<DeletePostBloc>();
     return Scaffold(
@@ -128,23 +135,44 @@ class _SreenUserPostState extends State<SreenUserPost> {
                               textColor: kblackColor,
                             ),
                           ),
-                          Row(
-                            children: [
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.favorite,
-                                    color: kredcolor,
-                                  )),
-                              customHeadingtext(
-                                  '${state.userposts[index].likes.length}', 15,
-                                  textColor: kblackColor),
-                              kwidth,
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.comment)),
-                            ],
-                          )
+                        MultiBlocBuilder(
+                                      blocs: [
+                                        context.watch<LikeUnlikePostBloc>(),
+                                        context.watch<LoginUserBloc>(),
+                                      ],
+                                      builder: (context, states) {
+                                        //var state1 = states[0];
+                                        var state2 = states[1];
+                                        if (state2 is LoginUserSuccessState) {
+                                          return Row(
+                                            children: [
+                                            FavouriteSectionUserpost(state2: state2, likebloc:likebloc, state:state, index: index),
+                                              customHeadingtext(
+                                                  '${state.userposts[index].likes.length}',
+                                                  15,
+                                                  fontWeight: FontWeight.w500,
+                                                  textColor: kblackColor),
+                                              state.userposts[index].likes
+                                                          .length >
+                                                      1
+                                                  ? customHeadingtext(
+                                                      'Likes', 15,
+                                                      textColor: kblackColor)
+                                                  : customHeadingtext(
+                                                      'Like', 15,
+                                                      textColor: kblackColor),
+                                              kwidth,
+                                              CommentWidget(
+                                                
+                                                state2: state2,
+                                                postId: state.userposts[index].id
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                        return const SizedBox();
+                                      },
+                                    )
                         ],
                       ),
                     ),

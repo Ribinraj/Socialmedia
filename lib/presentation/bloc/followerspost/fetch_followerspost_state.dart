@@ -5,12 +5,12 @@ sealed class FetchFollowerspostState {}
 
 final class FetchFollowerspostInitial extends FetchFollowerspostState {}
 
-final class FetchFollowersLoadingState extends FetchFollowerspostState {}
+final class FetchFollowersPostLoadingState extends FetchFollowerspostState {}
 
-final class FetchFollowersSuccessState extends FetchFollowerspostState {
+final class FetchFollowersPostSuccessState extends FetchFollowerspostState {
   final List<FollowerspostModel> followersposts;
 
-  FetchFollowersSuccessState({required this.followersposts});
+  FetchFollowersPostSuccessState({required this.followersposts});
 }
-final class FetchFollowersInternalErrorstate extends FetchFollowerspostState{}
-final class FetchFollowersErrorState extends FetchFollowerspostState{}
+final class FetchFollowersPostInternalErrorstate extends FetchFollowerspostState{}
+final class FetchFollowerPostErrorState extends FetchFollowerspostState{}

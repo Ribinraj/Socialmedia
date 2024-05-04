@@ -4,14 +4,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/presentation/bloc/followerspost/fetch_followerspost_bloc.dart';
 import 'package:social_media_app/presentation/bloc/like_unlikepost/like_unlike_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/login_user/login_user_bloc.dart';
+
+import 'package:social_media_app/presentation/bloc/saved_post/saved_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/suggession_bloc/suggession_users_bloc.dart';
 import 'package:social_media_app/presentation/screens/home_screen/widgets/favourit_section.dart';
 
 import 'package:social_media_app/presentation/screens/home_screen/widgets/comment_section.dart';
+import 'package:social_media_app/presentation/screens/home_screen/widgets/postusernamesession.dart';
+import 'package:social_media_app/presentation/screens/home_screen/widgets/report_and_savedpost.dart';
+
 import 'package:social_media_app/presentation/screens/home_screen/widgets/shimmer_homepage.dart';
 
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
+import 'package:social_media_app/presentation/screens/profile_screen/profile_screen.dart';
+import 'package:social_media_app/presentation/widgets/custom_navigator.dart';
 
 import 'package:social_media_app/presentation/widgets/custom_round_image.dart';
 import 'package:social_media_app/presentation/widgets/custom_snakbar.dart';
@@ -36,27 +43,30 @@ class _ScreenHomeState extends State<ScreenHome> {
     context
         .read<FetchFollowerspostBloc>()
         .add(InitialFetchingEventFollowersPost(n: currentPage));
+    context.read<SuggessionUsersBloc>().add(SuggessionUsersInitialEvent());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final likebloc = context.read<LikeUnlikePostBloc>();
+    final savedbloc = context.read<SavedPostBloc>();
+
     Size size = MediaQuery.of(context).size;
     const double circleContainerSize = 70;
     return SafeArea(
       child: Scaffold(
         body: BlocConsumer<FetchFollowerspostBloc, FetchFollowerspostState>(
           listener: (context, state) {
-            if (state is FetchFollowersInternalErrorstate) {
+            if (state is FetchFollowersPostInternalErrorstate) {
               return customSnackbar(
                   context, 'internal Server Error', kredcolor);
             }
           },
           builder: (context, state) {
-            if (state is FetchFollowersLoadingState) {
+            if (state is FetchFollowersPostLoadingState) {
               return const Screenhomeshimmer();
-            } else if (state is FetchFollowersSuccessState) {
+            } else if (state is FetchFollowersPostSuccessState) {
               return NestedScrollView(
                 floatHeaderSlivers: true,
                 headerSliverBuilder: (context, bool isScrolled) {
@@ -119,25 +129,47 @@ class _ScreenHomeState extends State<ScreenHome> {
                       ),
                       LimitedBox(
                         maxHeight: 110,
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(width: 10),
-                          itemCount: 20,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                kheight,
-                                const CustomRoundImage(
-                                    circleContainerSize: circleContainerSize,
-                                    imageUrl:
-                                        "https://stimg.cardekho.com/images/carexteriorimages/630x420/Mahindra/Thar/10745/1697697308167/front-left-side-47.jpg?imwidth=420&impolicy=resize"),
-                                customHeadingtext('Jazim mpt', 13,
-                                    fontWeight: FontWeight.w500,
-                                    textColor: kblackColor)
-                              ],
-                            );
+                        child: BlocBuilder<SuggessionUsersBloc,
+                            SuggessionUsersState>(
+                          builder: (context, state3) {
+                            if (state3 is SuggessionUsersSuccessState) {
+                              return ListView.separated(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(width: 10),
+                                itemCount: state3.suggessions.data.length,
+                                itemBuilder: (context, index) {
+                                  final details =
+                                      state3.suggessions.data[index];
+                                  return Column(
+                                    children: [
+                                      kheight,
+                                      InkWell(
+                                        onTap: () {
+                                          navigatePush(
+                                              context,
+                                              ScreenProfile(id: details.id, backgroundimage: details.backGroundImage, profilepic: details.profilePic, username:details.userName,bio: details.bio,));
+                                        },
+                                        child: CustomRoundImage(
+                                            circleContainerSize:
+                                                circleContainerSize,
+                                            imageUrl: state3.suggessions
+                                                .data[index].profilePic),
+                                      ),
+                                      customHeadingtext(
+                                          state3
+                                              .suggessions.data[index].userName,
+                                          13,
+                                          fontWeight: FontWeight.w500,
+                                          textColor: kblackColor)
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
                           },
                         ),
                       ),
@@ -182,50 +214,16 @@ class _ScreenHomeState extends State<ScreenHome> {
                                                 .userId
                                                 .profilePic),
                                         kwidth,
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            customHeadingtext(
-                                                state.followersposts[index]
-                                                    .userId.userName,
-                                                18,
-                                                textColor: kblackColor,
-                                                fontWeight: FontWeight.bold),
-                                            state.followersposts[index]
-                                                        .createdAt !=
-                                                    state.followersposts[index]
-                                                        .updatedAt
-                                                ? customstyletext(
-                                                    '${timeago.format(state.followersposts[index].updatedAt)}(edited)',
-                                                    13,
-                                                    textColor: kgreycolor)
-                                                : customstyletext(
-                                                    timeago.format(state
-                                                        .followersposts[index]
-                                                        .createdAt),
-                                                    13,
-                                                    textColor: kgreycolor),
-                                          ],
+                                        PostUsernameSection(
+                                          state: state,
+                                          index: index,
                                         ),
                                         kwidth30,
                                         const Spacer(),
-                                        PopupMenuButton<String>(
-                                          onSelected: (value) {
-                                            if (value == 'Save') {
-                                            } else if (value == 'Report') {}
-                                          },
-                                          itemBuilder: (BuildContext context) =>
-                                              [
-                                            const PopupMenuItem(
-                                              value: 'Save',
-                                              child: Text('Save'),
-                                            ),
-                                            const PopupMenuItem(
-                                              value: 'Report',
-                                              child: Text('Report'),
-                                            ),
-                                          ],
+                                        ReportAndSavedPost(
+                                          savedbloc: savedbloc,
+                                          state: state,
+                                          index: index,
                                         )
                                       ],
                                     ),
@@ -282,9 +280,9 @@ class _ScreenHomeState extends State<ScreenHome> {
                                                       textColor: kblackColor),
                                               kwidth,
                                               CommentWidget(
-                                                index: index,
+                                                
                                                 state2: state2,
-                                                state: state,
+                                                postId: state.followersposts[index].id
                                               ),
                                             ],
                                           );
@@ -312,87 +310,3 @@ class _ScreenHomeState extends State<ScreenHome> {
     );
   }
 }
-
-
-
-//class MainCardContainer extends StatelessWidget {
-//   const MainCardContainer({
-//     super.key,
-//     required this.size,
-//     required  this.state
-//   });
-
-//   final Size size;
-//   final FetchPostSuccessState state;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.only(
-//         top: 10,
-//         left: 5,
-//         right: 5,
-//       ),
-//       height: 550,
-//       width: double.infinity,
-//       decoration: BoxDecoration(
-//           color: kpurpledoublelightColor, borderRadius: kradius10),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Row(
-//             children: [
-//               const CustomRoundImage(
-//                   circleContainerSize: 45,
-//                   imageUrl:
-//                       "https://i.pinimg.com/736x/d0/4b/1f/d04b1f2ed3ca8ad4a302fbe9f4f5a875.jpg"),
-//               kwidth,
-//               Column(
-//                 children: [
-//                   customHeadingtext(state.posts[index].userId.userName, 18,
-//                       textColor: kblackColor, fontWeight: FontWeight.bold),
-//                   customstyletext('11 hours ago', 15, textColor: kgreycolor)
-//                 ],
-//               )
-//             ],
-//           ),
-//           kheight,
-//           Container(
-//             width: size.width,
-//             height: 375,
-//             decoration: BoxDecoration(
-//                 image: DecorationImage(
-//                   fit: BoxFit.cover,
-//                   image: NetworkImage(state.posts[index].image),
-//                 ),
-//                 borderRadius: kradius10),
-//           ),
-//           kheight,
-//           SizedBox(
-//             height: 50,
-//             child: customHeadingtext(
-//               state.posts[index].description,
-//               16,
-//               textColor: kblackColor,
-//             ),
-//           ),
-//           Row(
-//             children: [
-//               IconButton(
-//                   onPressed: () {},
-//                   icon: const Icon(
-//                     Icons.favorite,
-//                     color: kredcolor,
-//                   )),
-//               customHeadingtext('${state.posts[index].likes.length}', 15,
-//                   textColor: kblackColor),
-//               kwidth,
-//               IconButton(onPressed: () {}, icon: const Icon(Icons.comment)),
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-//shimmer

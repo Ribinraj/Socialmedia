@@ -4,7 +4,8 @@ import 'package:social_media_app/core/colors.dart';
 class CustomRoundImage extends StatelessWidget {
   const CustomRoundImage({
     super.key,
-    required this.circleContainerSize, required this.imageUrl,
+    required this.circleContainerSize,
+    required this.imageUrl,
   });
   final String imageUrl;
   final double circleContainerSize;
@@ -22,14 +23,12 @@ class CustomRoundImage extends StatelessWidget {
       child: UnconstrainedBox(
         child: ClipOval(
           child: Container(
-            height: circleContainerSize - 10,
-            width: circleContainerSize - 10,
-            decoration:  BoxDecoration(
+            height: circleContainerSize - 7,
+            width: circleContainerSize - 7,
+            decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage(
-                 imageUrl
-                ),
+                image: NetworkImage(imageUrl),
               ),
             ),
           ),

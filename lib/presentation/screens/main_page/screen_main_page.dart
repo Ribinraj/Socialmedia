@@ -103,7 +103,7 @@ class SCreenmainpage extends StatefulWidget {
 class _SCreenmainpageState extends State<SCreenmainpage> {
   final List<Widget> pages = [
     const ScreenHome(),
-    const ScreenSearch(),
+    const SearchResultWidget(),
     const ScreenAddPost(),
     const ScreenUserProfile(),
   ];

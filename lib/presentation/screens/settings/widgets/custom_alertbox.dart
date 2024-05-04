@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_media_app/core/colors.dart';
+import 'package:social_media_app/presentation/screens/main_page/screen_main_page.dart';
 import 'package:social_media_app/presentation/screens/signin/screen_signin.dart';
 import 'package:social_media_app/presentation/widgets/custom_navigator.dart';
 import 'package:social_media_app/presentation/widgets/tex.dart';
@@ -20,6 +21,7 @@ void showAlertDialog(BuildContext context) {
           preferences.setBool('LOGIN', false);
           // ignore: use_build_context_synchronously
           navigatePushandRemoveuntil(context, const ScreenSignIn());
+             currentPage.value = 0;
         },
         child: const Text("OK"),
       ),

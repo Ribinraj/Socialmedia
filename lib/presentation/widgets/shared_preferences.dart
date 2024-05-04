@@ -9,3 +9,7 @@ Future<String?> getUserId() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   return preferences.getString('USER_ID');
 }
+Future<String?> getUsername() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  return preferences.getString('USER_NAME');
+}

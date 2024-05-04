@@ -9,33 +9,38 @@ class FavouriteSection extends StatelessWidget {
   const FavouriteSection({
     super.key,
     required this.state2,
-    required this.likebloc, required this.state, required this.index,
+    required this.likebloc,
+    required this.state,
+    required this.index,
   });
 
   final LoginUserSuccessState state2;
   final LikeUnlikePostBloc likebloc;
-  final FetchFollowersSuccessState state;
+  final FetchFollowersPostSuccessState state;
   final int index;
   @override
   Widget build(BuildContext context) {
+    final loginuserdata=state2.loginuserdata;
     return IconButton(
-        onPressed: () {
-          if (state.followersposts[index].isLiked == false) {
-            state.followersposts[index].isLiked = true;
-            state.followersposts[index].likes
-                .add(UserId.fromJson(state2.loginuserdata.toJson()));
-            likebloc.add(LikepostEvent(postid: state.followersposts[index].id));
-          } else {
-            state.followersposts[index].isLiked = false;
-            state.followersposts[index].likes.removeWhere(
-                (element) => element.id == state2.loginuserdata.id);
-            likebloc
-                .add(UnlikePostEvent(postid: state.followersposts[index].id));
-          }
-        },
-        icon: Icon(Icons.favorite,
-            color: state.followersposts[index].isLiked == true
-                ? kredcolor
-                : kwhiteColor),);
+      onPressed: () {
+        if (state.followersposts[index].isLiked == false) {
+          state.followersposts[index].isLiked = true;
+          state.followersposts[index].likes
+              .add(UserId(id:loginuserdata.id, userName:loginuserdata.userName, email: loginuserdata.email, password:'', profilePic:loginuserdata.profilePic, phone:loginuserdata.phone, online:loginuserdata.online, blocked:loginuserdata.blocked, verified: loginuserdata.verified, createdAt:loginuserdata.createdAt, updatedAt:loginuserdata.updatedAt, v: loginuserdata.v, isPrivate:loginuserdata.isPrivate, role:loginuserdata.role, backGroundImage:loginuserdata.backGroundImage));
+         
+          likebloc.add(LikepostEvent(postid: state.followersposts[index].id));
+        } else {
+          state.followersposts[index].isLiked = false;
+          state.followersposts[index].likes
+              .removeWhere((element) => element.id == state2.loginuserdata.id);
+         
+          likebloc.add(UnlikePostEvent(postid: state.followersposts[index].id));
+        }
+      },
+      icon: Icon(Icons.favorite,
+          color: state.followersposts[index].isLiked == true
+              ? kredcolor
+              : kwhiteColor),
+    );
   }
 }

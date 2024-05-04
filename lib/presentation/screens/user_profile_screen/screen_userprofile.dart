@@ -5,15 +5,17 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
 import 'package:social_media_app/presentation/bloc/fetchpost/fetch_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/fetchsavedpost/fetch_saved_post_bloc.dart';
 
 import 'package:social_media_app/presentation/bloc/login_user/login_user_bloc.dart';
-
-import 'package:social_media_app/presentation/screens/profile_screen/profile_screen.dart';
+import 'package:social_media_app/presentation/screens/Screen_savedposts/screen_savedposts.dart';
+import 'package:social_media_app/presentation/screens/followers_screen/followers_screen.dart';
+import 'package:social_media_app/presentation/screens/following_screen/folloing_screen.dart';
 
 import 'package:social_media_app/presentation/screens/user_profile_screen/widgets/allpost_widget.dart';
 
 import 'package:social_media_app/presentation/screens/user_profile_screen/widgets/editprofile_settings_row.dart';
-
+import 'package:social_media_app/presentation/widgets/custom_navigator.dart';
 
 import 'package:social_media_app/presentation/widgets/tex.dart';
 
@@ -33,6 +35,7 @@ class _ScreenUserProfileState extends State<ScreenUserProfile>
     _tabController = TabController(length: 2, vsync: this);
     context.read<FetchPostBloc>().add(FetchPostInitialEvent());
     context.read<LoginUserBloc>().add(LoginUserInitialFetchingEvent());
+    context.read<FetchSavedPostBloc>().add(FetchSavedpostInitialEvent());
     // context.read<FetchingUserPostBloc>().add(FetchingUserpostInitialEvent());
   }
 
@@ -104,7 +107,7 @@ class _ScreenUserProfileState extends State<ScreenUserProfile>
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        ScreenProfile()),
+                                                        const FollowersScreen()),
                                               );
                                             },
                                             child: Column(
@@ -121,7 +124,10 @@ class _ScreenUserProfileState extends State<ScreenUserProfile>
                                             ),
                                           ),
                                           GestureDetector(
-                                            onTap: () {},
+                                            onTap: () {
+                                              navigatePush(context,
+                                                  const FollowingScreen());
+                                            },
                                             child: Column(
                                               children: [
                                                 customHeadingtext('100K', 17,
@@ -208,23 +214,56 @@ class _ScreenUserProfileState extends State<ScreenUserProfile>
                         return AutoScaleTabBarView(
                           controller: _tabController,
                           children: [
-                             AllpostWidget(state: state,),
-                            GridView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount:
-                                    3, // Adjust for desired number of columns
-                                crossAxisSpacing: 5.0,
-                                mainAxisSpacing: 5.0,
-                              ),
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  color: kpurpleColor,
-                                );
+                            AllpostWidget(
+                              state: state,
+                            ),
+                            BlocBuilder<FetchSavedPostBloc,
+                                FetchSavedPostState>(
+                              builder: (context, state1) {
+                                if (state1 is FetchSavedpostLoadingState) {
+                                  return Center(
+                                      child: LoadingAnimationWidget
+                                          .fourRotatingDots(
+                                              color: kpurpleMediumColor,
+                                              size: 40));
+                                } else if (state1
+                                    is FetchSavedpostSuccessState) {
+                                  return GridView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount:
+                                          3, // Adjust for desired number of columns
+                                      crossAxisSpacing: 5.0,
+                                      mainAxisSpacing: 5.0,
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                        onTap: () {
+                                          navigatePush(
+                                              context, const SreenSavedPost());
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                state1.savedposts[index].postId
+                                                    .image,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    itemCount: state1.savedposts.length,
+                                  );
+                                } else {
+                                  return const SizedBox();
+                                }
                               },
-                              itemCount: 10,
                             ),
                           ],
                         );
@@ -242,5 +281,3 @@ class _ScreenUserProfileState extends State<ScreenUserProfile>
     );
   }
 }
-
-

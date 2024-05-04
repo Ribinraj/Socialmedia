@@ -68,8 +68,11 @@ class _CommentPageState extends State<CommentPage> {
                         kheight20,
 
                         SizedBox(
-                          height: 50,
+                          height: 80,
                           child: TextField(
+                            maxLines:
+                                null, // Allows the text field to expand vertically.
+                            keyboardType: TextInputType.multiline,
                             controller: textcontroller,
                             decoration: InputDecoration(
                               hintText: 'Write a comment...',
@@ -155,18 +158,45 @@ class _CommentPageState extends State<CommentPage> {
                                                   comment.user.id == userdata.id
                                                       ? IconButton(
                                                           onPressed: () {
-                                                            deletecomment.add(
-                                                                CommentDeleteClickEvent(
-                                                                    commentId:
-                                                                        comment
-                                                                            .id));
-                                                            state.comments
-                                                                .removeWhere(
-                                                                    (element) =>
-                                                                        element
-                                                                            .id ==
-                                                                        comment
-                                                                            .id);
+                                                            showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return AlertDialog(
+                                                                  title: const Text(
+                                                                      'Are you sure?'),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        // Close the dialog
+                                                                         deletecomment.add(CommentDeleteClickEvent(
+                                                                            commentId:
+                                                                                comment.id));
+                                                                        state.comments.removeWhere((element) =>
+                                                                            element.id ==
+                                                                            comment.id);
+                                                                             Navigator.pop(
+                                                                            context);
+                                                                      },
+                                                                      child: const Text(
+                                                                          'Yes'),
+                                                                    ),
+                                                                    TextButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                     
+                                                                        Navigator.pop(
+                                                                            context); // Close the dialog
+                                                                      },
+                                                                      child: const Text(
+                                                                          'No'),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            );
                                                           },
                                                           icon: const Icon(
                                                             Icons.delete,

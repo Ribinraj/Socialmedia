@@ -8,18 +8,27 @@ import 'package:social_media_app/presentation/bloc/cmment_delete/comment_delete_
 import 'package:social_media_app/presentation/bloc/deletepost/delete_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/editbloc/edit_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/editprofile/edit_profile_bloc.dart';
+import 'package:social_media_app/presentation/bloc/explore_post_bloc/explore_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/fetch_followers/fetch_followers_bloc.dart';
+import 'package:social_media_app/presentation/bloc/fetch_following.dart/fetch_followings_bloc.dart';
 import 'package:social_media_app/presentation/bloc/fetchcomment/fetch_comment_bloc.dart';
 
 import 'package:social_media_app/presentation/bloc/fetchpost/fetch_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/fetchsavedpost/fetch_saved_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/fetchuserpost/fetching_user_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/follow_unfollow/follow_unfollow_bloc.dart';
 import 'package:social_media_app/presentation/bloc/followerspost/fetch_followerspost_bloc.dart';
 import 'package:social_media_app/presentation/bloc/imagepicker/image_picker_bloc.dart';
 import 'package:social_media_app/presentation/bloc/like_unlikepost/like_unlike_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/login/login_bloc.dart';
 import 'package:social_media_app/presentation/bloc/login_user/login_user_bloc.dart';
 import 'package:social_media_app/presentation/bloc/otp/otp_bloc.dart';
+import 'package:social_media_app/presentation/bloc/report_post/report_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/saved_post/saved_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/search_bloc/search_user_bloc.dart';
 import 'package:social_media_app/presentation/bloc/signup/signup_bloc.dart';
-import 'package:social_media_app/presentation/cubit/bottomnav_cubit/bottonav_cubit.dart';
+import 'package:social_media_app/presentation/bloc/suggession_bloc/suggession_users_bloc.dart';
+import 'package:social_media_app/presentation/cubit/reportCubit/bottonav_cubit.dart';
 
 import 'package:social_media_app/presentation/screens/splash_screen/screen_splash.dart';
 
@@ -44,7 +53,7 @@ class MyApp extends StatelessWidget {
           create: (context) => LoginBloc(),
         ),
         BlocProvider(
-          create: (context) => BottomnavCubit(),
+          create: (context) => ReportCubit(),
         ),
         BlocProvider(
           create: (context) => AddPostBloc(),
@@ -80,9 +89,36 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AddCommentBloc(),
         ),
-           BlocProvider(
-          create: (context) => CommentDeleteBloc(),
+        BlocProvider(
+          create: (context) =>CommentDeleteBloc()
         ),
+        BlocProvider(
+          create: (context) => SavedPostBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ReportPostBloc(),
+        ),
+        BlocProvider(
+          create: (context) => FetchSavedPostBloc(),
+        ),
+        BlocProvider(
+          create: (context) => SuggessionUsersBloc(),
+        ),
+          BlocProvider(
+          create: (context) =>FollowUnfollowBloc(),
+        ),
+            BlocProvider(
+          create: (context) =>FetchFollowingsBloc(),
+        ),
+             BlocProvider(
+          create: (context) => FetchFollowersBloc(),
+        ),
+              BlocProvider(
+          create: (context) => ExplorePostBloc(),
+        ),
+                 BlocProvider(
+          create: (context) => SearchUserBloc(),
+        )
       ],
       child: MaterialApp(
         title: 'Social_media',

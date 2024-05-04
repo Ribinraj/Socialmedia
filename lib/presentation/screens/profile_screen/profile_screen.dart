@@ -1,22 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
+
+
+import 'package:social_media_app/presentation/bloc/fetchuserpost/fetching_user_post_bloc.dart';
+import 'package:social_media_app/presentation/bloc/follow_unfollow/follow_unfollow_bloc.dart';
+import 'package:social_media_app/presentation/bloc/suggession_bloc/suggession_users_bloc.dart';
 
 import 'package:social_media_app/presentation/widgets/custom_profile_button.dart';
 import 'package:social_media_app/presentation/widgets/tex.dart';
 
-class ScreenProfile extends StatelessWidget {
-  ScreenProfile({super.key});
-  final List imageList = [
-    "https://img.freepik.com/free-photo/sports-car-driving-asphalt-road-night-generative-ai_188544-8052.jpg?w=900&t=st=1711111620~exp=1711112220~hmac=5dbcde759ef836ae9d03590c6b7500a636ee1b95c9fd83c2ff1c292472746715",
-    "https://stimg.cardekho.com/images/carexteriorimages/630x420/Mahindra/Thar/10745/1697697308167/front-left-side-47.jpg?imwidth=420&impolicy=resize",
-    "https://img.freepik.com/free-photo/beautiful-view-greenery-bridge-forest-perfect-background_181624-17827.jpg?size=626&ext=jpg&ga=GA1.1.735520172.1711065600&semt=ais",
-    "https://images.pexels.com/photos/707046/pexels-photo-707046.jpeg?cs=srgb&dl=pexels-trace-constant-707046.jpg&fm=jpg",
-    "https://i.pinimg.com/736x/d0/4b/1f/d04b1f2ed3ca8ad4a302fbe9f4f5a875.jpg"
-  ];
+class ScreenProfile extends StatefulWidget {
+  final String id;
+  final String backgroundimage;
+  final String profilepic;
+  final String username;
+  final String? bio;
+  const ScreenProfile({super.key,  required this.id, required this.backgroundimage, required this.profilepic, required this.username, this.bio});
+
+  @override
+  State<ScreenProfile> createState() => _ScreenProfileState();
+}
+
+class _ScreenProfileState extends State<ScreenProfile> {
+  @override
+  void initState() {
+    context
+        .read<FetchingUserPostBloc>()
+        .add(FetchingUserpostInitialEvent(userId: widget.id));
+    context
+        .read<FollowUnfollowBloc>()
+        .add(IsfollowingInitialEvent(userId: widget.id));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final followUnfollow = context.read<FollowUnfollowBloc>();
     Size size = MediaQuery.of(context).size;
     const double circleContainerSize = 130.0;
 
@@ -35,11 +57,10 @@ class ScreenProfile extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     height: 250,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(
-                            "https://img.freepik.com/free-photo/sports-car-driving-asphalt-road-night-generative-ai_188544-8052.jpg?w=900&t=st=1711111620~exp=1711112220~hmac=5dbcde759ef836ae9d03590c6b7500a636ee1b95c9fd83c2ff1c292472746715"),
+                        image: NetworkImage(widget.backgroundimage),
                       ),
                     ),
                   ),
@@ -93,16 +114,62 @@ class ScreenProfile extends StatelessWidget {
                               ],
                             ),
                           ),
-                          customHeadingtext('Vyshak OP', 22,
+                          customHeadingtext(widget.username, 22,
                               textColor: kblackColor,
                               fontWeight: FontWeight.w500),
-                          customHeadingtext('ernamkulam', 17,
+                          customHeadingtext(widget.bio ?? '', 17,
                               textColor: kblackColor),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              CustomProfilebutton(
-                                  onPressed: () {}, buttonText: 'Follow'),
+                              BlocConsumer<FollowUnfollowBloc,
+                                  FollowUnfollowState>(
+                                listener: (context, state) {
+                                  if (state is FollowuserSuccessState) {
+                                    context.read<FollowUnfollowBloc>().add(
+                                        IsfollowingInitialEvent(
+                                            userId: widget.id));
+                                    context
+                                        .read<SuggessionUsersBloc>()
+                                        .add(SuggessionUsersInitialEvent());
+                                  } else if (state
+                                      is UnfollowuserSuccessState) {
+                                    context.read<FollowUnfollowBloc>().add(
+                                        IsfollowingInitialEvent(
+                                            userId: widget.id));
+                                    context
+                                        .read<SuggessionUsersBloc>()
+                                        .add(SuggessionUsersInitialEvent());
+                                  }
+                                },
+                                builder: (context, state) {
+                                  if (state is IsfollowingSuccessState) {
+                                    bool isfollowing = state.isfollowing;
+                                    return CustomProfilebutton(
+                                        onPressed: () {
+                                          if (isfollowing == false) {
+                                            isfollowing = true;
+                                            followUnfollow.add(
+                                                FollowButtonClickEvent(
+                                                    followeeId:
+                                                        widget.id));
+                                          } else {
+                                            isfollowing = false;
+                                            followUnfollow.add(
+                                                UnFollowButtonClickEvent(
+                                                    unfolloweeId:
+                                                        widget.id));
+                                          }
+                                        },
+                                        buttonText: isfollowing == false
+                                            ? 'Follow'
+                                            : 'Unfollow');
+                                  } else {
+                                    return CustomProfilebutton(
+                                        onPressed: () {}, buttonText: '');
+                                  }
+                                },
+                              ),
                               kwidth20,
                               CustomProfilebutton(
                                   onPressed: () {}, buttonText: 'Message')
@@ -131,11 +198,11 @@ class ScreenProfile extends StatelessWidget {
                           child: Container(
                             height: circleContainerSize - 10,
                             width: circleContainerSize - 10,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: NetworkImage(
-                                    "https://stimg.cardekho.com/images/carexteriorimages/630x420/Mahindra/Thar/10745/1697697308167/front-left-side-47.jpg?imwidth=420&impolicy=resize",
+                                  widget.profilepic,
                                 ),
                               ),
                             ),
@@ -146,27 +213,38 @@ class ScreenProfile extends StatelessWidget {
                   ),
                 ],
               ),
-              GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
-                ),
-                padding: const EdgeInsets.all(5),
-                shrinkWrap: true,
-                itemCount: imageList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                          imageList[index],
-                        ),
+              BlocBuilder<FetchingUserPostBloc, FetchingUserPostState>(
+                builder: (context, state) {
+                  if (state is FetchUserPostLoadingState) {
+                    return Center(
+                        child: LoadingAnimationWidget.fourRotatingDots(
+                            color: kpurpleMediumColor, size: 40));
+                  } else if (state is FetchUserPostSuccessState) {
+                    return GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 5,
                       ),
-                    ),
-                  );
+                      padding: const EdgeInsets.all(5),
+                      shrinkWrap: true,
+                      itemCount: state.userposts.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(state.userposts[index].image),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
                 },
               ),
             ],

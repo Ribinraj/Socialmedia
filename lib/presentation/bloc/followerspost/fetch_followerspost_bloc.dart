@@ -22,7 +22,7 @@ class FetchFollowerspostBloc
   FutureOr<void> fetchingeventfollowerspost(
       InitialFetchingEventFollowersPost event,
       Emitter<FetchFollowerspostState> emit) async {
-    emit(FetchFollowersLoadingState());
+    emit(FetchFollowersPostLoadingState());
     final Response response = await PostRepo.fetchfollowespost(n: event.n);
     List<FollowerspostModel> followersposts = [];
 
@@ -33,11 +33,11 @@ class FetchFollowerspostBloc
             responsedata[i] as Map<String, dynamic>);
         followersposts.add(followerspost);
       }
-      emit(FetchFollowersSuccessState(followersposts: followersposts));
+      emit(FetchFollowersPostSuccessState(followersposts: followersposts));
     } else if (response.statusCode == 500) {
-      emit(FetchFollowersInternalErrorstate());
+      emit(FetchFollowersPostInternalErrorstate());
     } else {
-      emit(FetchFollowersErrorState());
+      emit(FetchFollowerPostErrorState());
     }
   }
   
@@ -45,8 +45,8 @@ class FetchFollowerspostBloc
     LoadMoreFollowersPostsEvent event,
     Emitter<FetchFollowerspostState> emit,
   ) async {
-    if (state is FetchFollowersSuccessState) {
-      final currentState = state as FetchFollowersSuccessState;
+    if (state is FetchFollowersPostSuccessState) {
+      final currentState = state as FetchFollowersPostSuccessState;
       final int currentPage = currentState.followersposts.length ~/ 5 + 1; 
 
       final Response response = await PostRepo.fetchfollowespost(n: currentPage);
@@ -61,9 +61,9 @@ class FetchFollowerspostBloc
         }
 
         List<FollowerspostModel> updatedPosts = List.of(currentState.followersposts)..addAll(newPosts);
-        emit(FetchFollowersSuccessState(followersposts: updatedPosts));
+        emit(FetchFollowersPostSuccessState(followersposts: updatedPosts));
       } else {
-        emit(FetchFollowersErrorState());
+        emit(FetchFollowerPostErrorState());
       }
     }
   }
