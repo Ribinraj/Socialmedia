@@ -27,6 +27,7 @@ class AllpostWidget extends StatelessWidget {
                 context,
                 SreenUserPost(
                   userId: state.posts[index].userId.id,
+                  initialindex: index,
                 ));
           },
           child: Container(

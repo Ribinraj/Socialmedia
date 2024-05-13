@@ -37,6 +37,14 @@ class FollowersScreenState extends State<FollowersScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kpurpleColor,
+        leading:  GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: kwhiteColor,
+            )),
         title: customHeadingtext('Followers', 25),
         centerTitle: true,
       ),

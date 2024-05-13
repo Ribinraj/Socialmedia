@@ -10,7 +10,7 @@ import 'package:social_media_app/presentation/bloc/fetchsavedpost/fetch_saved_po
 import 'package:social_media_app/presentation/bloc/like_unlikepost/like_unlike_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/login_user/login_user_bloc.dart';
 import 'package:social_media_app/presentation/screens/Screen_savedposts/favorite_section.dart';
-
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:social_media_app/presentation/screens/Screen_savedposts/popupmenubutton.dart';
 import 'package:social_media_app/presentation/screens/home_screen/widgets/comment_section.dart';
 
@@ -88,8 +88,15 @@ class _SreenSavedPostState extends State<SreenSavedPost> {
                                     18,
                                     textColor: kblackColor,
                                     fontWeight: FontWeight.bold),
-                                customstyletext('11 hours ago', 15,
-                                    textColor: kgreycolor)
+                                  state.savedposts[index].createdAt !=
+                state.savedposts[index].updatedAt
+            ? customstyletext(
+                '${timeago.format(state.savedposts[index].updatedAt)}(edited)',
+                13,
+                textColor: kgreycolor)
+            : customstyletext(
+                timeago.format(state.savedposts[index].createdAt), 13,
+                textColor: kgreycolor),
                               ],
                             ),
                             const Spacer(),

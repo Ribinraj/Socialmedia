@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/presentation/screens/main_page/screen_main_page.dart';
 import 'package:social_media_app/presentation/screens/signin/screen_signin.dart';
 
-import 'package:social_media_app/presentation/widgets/tex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:social_media_app/presentation/widgets/titlelogo.dart';
 
 class ScreenSplash extends StatefulWidget {
   const ScreenSplash({super.key});
@@ -28,9 +29,8 @@ class _ScreenSplashState extends State<ScreenSplash> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
-              child: customHeadingtext('Junction', 50,
-                  fontWeight: FontWeight.bold))
+          Center(child: titlelogo()),
+          LoadingAnimationWidget.prograssiveDots(color: kwhiteColor, size: 40),
         ],
       ),
     );

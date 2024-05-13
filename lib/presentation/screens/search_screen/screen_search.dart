@@ -62,6 +62,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/presentation/bloc/explore_post_bloc/explore_post_bloc.dart';
+import 'package:social_media_app/presentation/screens/explorepost_screen/explorepost_screen.dart';
 import 'package:social_media_app/presentation/screens/search_screen/widgets/search_idle.dart';
 import 'package:social_media_app/presentation/screens/search_screen/widgets/shimmer_result.dart';
 import 'package:social_media_app/presentation/widgets/custom_navigator.dart';
@@ -92,7 +93,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                 slivers: [
                   SliverAppBar(
                     floating: true,
-                    snap: true, // Makes the app bar hide and show instantly
+                    snap: true,
                     backgroundColor: Colors.white,
                     elevation: 0.5,
                     title: CupertinoSearchTextField(
@@ -122,17 +123,24 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: CachedNetworkImage(
-                              imageUrl: state.exploreposts[index].image,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => Center(
-                                child: LoadingAnimationWidget.fourRotatingDots(
-                                    color: kpurpleMediumColor, size: 40),
+                          return InkWell(
+                            onTap: () {
+                              navigatePush(context,
+                                  ScreenExplorePost(initialIndex: index));
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                imageUrl: state.exploreposts[index].image,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => Center(
+                                  child:
+                                      LoadingAnimationWidget.fourRotatingDots(
+                                          color: kpurpleMediumColor, size: 40),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
                               ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
                             ),
                           );
                         },
@@ -141,7 +149,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                     ),
                   if (state is! FetchexplorepostSuccessState &&
                       state is! FetchExplorepostLoadingState)
-                    SliverFillRemaining(
+                    const SliverFillRemaining(
                       child: Center(
                         child: Text("No content available."),
                       ),

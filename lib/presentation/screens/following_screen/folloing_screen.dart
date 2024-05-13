@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:multi_bloc_builder/multi_bloc_builder.dart';
 import 'package:social_media_app/core/colors.dart';
+
 import 'package:social_media_app/data/models/following_model.dart';
 import 'package:social_media_app/presentation/bloc/fetch_following.dart/fetch_followings_bloc.dart';
 import 'package:social_media_app/presentation/bloc/follow_unfollow/follow_unfollow_bloc.dart';
@@ -33,6 +34,14 @@ class FollowingScreenState extends State<FollowingScreen> {
     final unfollow = context.read<FollowUnfollowBloc>();
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: kwhiteColor,
+            )),
         backgroundColor: kpurpleColor,
         title: customHeadingtext('Followings', 25),
         centerTitle: true,

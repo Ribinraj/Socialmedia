@@ -3,21 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:social_media_app/core/colors.dart';
-import 'package:social_media_app/core/constants.dart';
+
+
+import 'package:social_media_app/presentation/bloc/fetch_followers/fetch_followers_bloc.dart';
+import 'package:social_media_app/presentation/bloc/fetch_following.dart/fetch_followings_bloc.dart';
 import 'package:social_media_app/presentation/bloc/fetchpost/fetch_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/fetchsavedpost/fetch_saved_post_bloc.dart';
 
 import 'package:social_media_app/presentation/bloc/login_user/login_user_bloc.dart';
 import 'package:social_media_app/presentation/screens/Screen_savedposts/screen_savedposts.dart';
-import 'package:social_media_app/presentation/screens/followers_screen/followers_screen.dart';
-import 'package:social_media_app/presentation/screens/following_screen/folloing_screen.dart';
+
 
 import 'package:social_media_app/presentation/screens/user_profile_screen/widgets/allpost_widget.dart';
 
-import 'package:social_media_app/presentation/screens/user_profile_screen/widgets/editprofile_settings_row.dart';
+
+import 'package:social_media_app/presentation/screens/user_profile_screen/widgets/followers_following_card.dart';
+
 import 'package:social_media_app/presentation/widgets/custom_navigator.dart';
 
-import 'package:social_media_app/presentation/widgets/tex.dart';
+import 'package:social_media_app/presentation/widgets/profilepic_section.dart';
+
+
 
 class ScreenUserProfile extends StatefulWidget {
   const ScreenUserProfile({super.key});
@@ -32,11 +38,12 @@ class _ScreenUserProfileState extends State<ScreenUserProfile>
   @override
   void initState() {
     super.initState();
+    context.read<FetchFollowingsBloc>().add(FetchFollowingInitialEvent());
+    context.read<FetchFollowersBloc>().add(FetchFollowersInitialEvent());
     _tabController = TabController(length: 2, vsync: this);
     context.read<FetchPostBloc>().add(FetchPostInitialEvent());
     context.read<LoginUserBloc>().add(LoginUserInitialFetchingEvent());
     context.read<FetchSavedPostBloc>().add(FetchSavedpostInitialEvent());
-    // context.read<FetchingUserPostBloc>().add(FetchingUserpostInitialEvent());
   }
 
   @override
@@ -76,120 +83,11 @@ class _ScreenUserProfileState extends State<ScreenUserProfile>
                                 ),
                               ),
                             ),
-                            Positioned(
-                              top: 200.0,
-                              left: 0.0,
-                              right: 0.0,
-                              child: Container(
-                                height: 230,
-                                decoration: const BoxDecoration(
-                                  color: kpurplelightColor,
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(30),
-                                    topLeft: Radius.circular(30),
-                                  ),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 35,
-                                          right: 35,
-                                          top: 15,
-                                          bottom: 15),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const FollowersScreen()),
-                                              );
-                                            },
-                                            child: Column(
-                                              children: [
-                                                customHeadingtext('100K ', 17,
-                                                    textColor: kblackColor,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                                customHeadingtext(
-                                                    'Followers', 15,
-                                                    fontWeight: FontWeight.w400,
-                                                    textColor: kblackColor)
-                                              ],
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              navigatePush(context,
-                                                  const FollowingScreen());
-                                            },
-                                            child: Column(
-                                              children: [
-                                                customHeadingtext('100K', 17,
-                                                    textColor: kblackColor,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                                customHeadingtext(
-                                                    'Following', 15,
-                                                    fontWeight: FontWeight.w400,
-                                                    textColor: kblackColor)
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    customHeadingtext(
-                                        state1.loginuserdata.userName, 22,
-                                        textColor: kblackColor,
-                                        fontWeight: FontWeight.w500),
-                                    customHeadingtext(
-                                        state1.loginuserdata.bio, 17,
-                                        textColor: kblackColor),
-                                    EditAndSettingsRow(
-                                      state1: state1,
-                                    ),
-                                    kheight,
-                                    customHeadingtext('All Posts', 20,
-                                        textColor: kblackColor,
-                                        fontWeight: FontWeight.w500)
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 140,
-                              left: (size.width - circleContainerSize) / 2,
-                              child: Container(
-                                height: circleContainerSize,
-                                width: circleContainerSize,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
-                                ),
-                                child: UnconstrainedBox(
-                                  child: ClipOval(
-                                    child: Container(
-                                      height: circleContainerSize - 10,
-                                      width: circleContainerSize - 10,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(
-                                            state1.loginuserdata.profilePic,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
+                            FollowersFollowingCard(state1: state1,),
+                            ProfilePicSection(
+                                profilepic: state1.loginuserdata.profilePic,
+                                size: size,
+                                circleContainerSize: circleContainerSize),
                           ],
                         );
                       } else {
@@ -281,3 +179,4 @@ class _ScreenUserProfileState extends State<ScreenUserProfile>
     );
   }
 }
+

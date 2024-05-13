@@ -38,7 +38,7 @@ class LoginUserRepo {
   static Future<String> editprofile(
       {String? imageurl,
       File? image,
-      String?backgroundImageurl,
+      String? backgroundImageurl,
       File? backgroundImage,
       String? bio,
       String? name}) async {
@@ -46,10 +46,17 @@ class LoginUserRepo {
     try {
       //  final imageUrl=image==null?imageurl:await uploadImage(image);
       final imageUrl = image != null ? await uploadImage(image) : imageurl;
-      final backgroundimageurl =backgroundImage!=null? await uploadImage(backgroundImage):backgroundImageurl;
+      final backgroundimageurl = backgroundImage != null
+          ? await uploadImage(backgroundImage)
+          : backgroundImageurl;
       final token = await getUserToken();
       debugPrint('image:$imageurl');
-      final editdata = {'image': imageUrl, 'name': name, 'bio': bio,'backGroundImage':backgroundimageurl};
+      final editdata = {
+        'image': imageUrl,
+        'name': name,
+        'bio': bio,
+        'backGroundImage': backgroundimageurl
+      };
 
       var response = await client.put(Uri.parse('$baseurl$editprofileurl'),
           headers: {
@@ -65,6 +72,67 @@ class LoginUserRepo {
       } else {
         return 'failed';
       }
+    } catch (e) {
+      debugPrint(e.toString());
+
+      return 'failed';
+    }
+  }
+
+  //get singleuser
+  static Future getsingleuser({required String userId}) async {
+    var client = http.Client();
+    try {
+      final token = await getUserToken();
+      var response = await client.get(
+        Uri.parse('$baseurl$getSingleuserurl/$userId'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+
+      return 'failed';
+    }
+  }
+
+  //getfollowers count
+  static Future getconnectioncount({required String userId}) async {
+    var client = http.Client();
+    try {
+      final token = await getUserToken();
+      var response = await client.get(
+        Uri.parse('$baseurl$connectioncounturl/$userId'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+
+      return 'failed';
+    }
+  }
+
+  //notification
+  static Future getnotification() async {
+    var client = http.Client();
+    try {
+      final token = await getUserToken();
+      var response = await client.get(
+        Uri.parse('$baseurl$notificationurl'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
+      debugPrint('notification:${response.body}');
+      return response;
     } catch (e) {
       debugPrint(e.toString());
 

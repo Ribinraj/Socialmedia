@@ -9,9 +9,12 @@ import 'package:social_media_app/presentation/bloc/deletepost/delete_post_bloc.d
 import 'package:social_media_app/presentation/bloc/fetchuserpost/fetching_user_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/like_unlikepost/like_unlike_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/login_user/login_user_bloc.dart';
+import 'package:social_media_app/presentation/screens/home_screen/screen_home.dart';
+
 import 'package:social_media_app/presentation/screens/home_screen/widgets/comment_section.dart';
 import 'package:social_media_app/presentation/screens/user_post/widgets/favorite.dart';
 
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:social_media_app/presentation/screens/user_post/widgets/popupmenu_button.dart';
 
@@ -21,7 +24,9 @@ import 'package:social_media_app/presentation/widgets/tex.dart';
 
 class SreenUserPost extends StatefulWidget {
   final String userId;
-  const SreenUserPost({super.key, required this.userId});
+  final int initialindex;
+  const SreenUserPost(
+      {super.key, required this.userId, required this.initialindex});
 
   @override
   State<SreenUserPost> createState() => _SreenUserPostState();
@@ -30,7 +35,9 @@ class SreenUserPost extends StatefulWidget {
 class _SreenUserPostState extends State<SreenUserPost> {
   @override
   void initState() {
-    context.read<FetchingUserPostBloc>().add(FetchingUserpostInitialEvent(userId: widget.userId));
+    context
+        .read<FetchingUserPostBloc>()
+        .add(FetchingUserpostInitialEvent(userId: widget.userId));
     // context.read<FetchPostBloc>().add(FetchPostInitialEvent());
     super.initState();
   }
@@ -68,6 +75,8 @@ class _SreenUserPostState extends State<SreenUserPost> {
                       color: kpurpleMediumColor, size: 40));
             } else if (state is FetchUserPostSuccessState) {
               return ListView.separated(
+                controller: ScrollController(
+                    initialScrollOffset: widget.initialindex * 450),
                 shrinkWrap: true,
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 10),
@@ -97,21 +106,33 @@ class _SreenUserPostState extends State<SreenUserPost> {
                                       state.userposts[index].userId.profilePic),
                               kwidth,
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   customHeadingtext(
                                       state.userposts[index].userId.userName,
                                       18,
                                       textColor: kblackColor,
                                       fontWeight: FontWeight.bold),
-                                  customstyletext('11 hours ago', 15,
-                                      textColor: kgreycolor)
+                                  state.userposts[index].createdAt !=
+                                          state.userposts[index].updatedAt
+                                      ? customstyletext(
+                                          '${timeago.format(state.userposts[index].updatedAt)}(edited)',
+                                          13,
+                                          textColor: kgreycolor)
+                                      : customstyletext(
+                                          timeago.format(
+                                              state.userposts[index].createdAt),
+                                          13,
+                                          textColor: kgreycolor),
                                 ],
                               ),
                               const Spacer(),
-                              PopupmenuButton(
-                                  deletoepostBloc: deletoepostBloc,
-                                  state: state,
-                                  index: index)
+                              widget.userId == loginuserid
+                                  ? PopupmenuButton(
+                                      deletoepostBloc: deletoepostBloc,
+                                      state: state,
+                                      index: index)
+                                  : const Text(''),
                             ],
                           ),
                           kheight,
@@ -135,44 +156,42 @@ class _SreenUserPostState extends State<SreenUserPost> {
                               textColor: kblackColor,
                             ),
                           ),
-                        MultiBlocBuilder(
-                                      blocs: [
-                                        context.watch<LikeUnlikePostBloc>(),
-                                        context.watch<LoginUserBloc>(),
-                                      ],
-                                      builder: (context, states) {
-                                        //var state1 = states[0];
-                                        var state2 = states[1];
-                                        if (state2 is LoginUserSuccessState) {
-                                          return Row(
-                                            children: [
-                                            FavouriteSectionUserpost(state2: state2, likebloc:likebloc, state:state, index: index),
-                                              customHeadingtext(
-                                                  '${state.userposts[index].likes.length}',
-                                                  15,
-                                                  fontWeight: FontWeight.w500,
-                                                  textColor: kblackColor),
-                                              state.userposts[index].likes
-                                                          .length >
-                                                      1
-                                                  ? customHeadingtext(
-                                                      'Likes', 15,
-                                                      textColor: kblackColor)
-                                                  : customHeadingtext(
-                                                      'Like', 15,
-                                                      textColor: kblackColor),
-                                              kwidth,
-                                              CommentWidget(
-                                                
-                                                state2: state2,
-                                                postId: state.userposts[index].id
-                                              ),
-                                            ],
-                                          );
-                                        }
-                                        return const SizedBox();
-                                      },
-                                    )
+                          MultiBlocBuilder(
+                            blocs: [
+                              context.watch<LikeUnlikePostBloc>(),
+                              context.watch<LoginUserBloc>(),
+                            ],
+                            builder: (context, states) {
+                              //var state1 = states[0];
+                              var state2 = states[1];
+                              if (state2 is LoginUserSuccessState) {
+                                return Row(
+                                  children: [
+                                    FavouriteSectionUserpost(
+                                        state2: state2,
+                                        likebloc: likebloc,
+                                        state: state,
+                                        index: index),
+                                    customHeadingtext(
+                                        '${state.userposts[index].likes.length}',
+                                        15,
+                                        fontWeight: FontWeight.w500,
+                                        textColor: kblackColor),
+                                    state.userposts[index].likes.length > 1
+                                        ? customHeadingtext('Likes', 15,
+                                            textColor: kblackColor)
+                                        : customHeadingtext('Like', 15,
+                                            textColor: kblackColor),
+                                    kwidth,
+                                    CommentWidget(
+                                        state2: state2,
+                                        postId: state.userposts[index].id),
+                                  ],
+                                );
+                              }
+                              return const SizedBox();
+                            },
+                          )
                         ],
                       ),
                     ),

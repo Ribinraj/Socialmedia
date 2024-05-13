@@ -31,7 +31,7 @@ class Following {
     DateTime createdAt;
     DateTime updatedAt;
     int v;
-    Role role;
+    String role;
     bool isPrivate;
     String? bio;
     String? name;
@@ -70,7 +70,7 @@ class Following {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
-        role: roleValues.map[json["role"]]!,
+        role: json["role"],
         isPrivate: json["isPrivate"],
         bio: json["bio"],
         name: json["name"],
@@ -90,7 +90,7 @@ class Following {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
-        "role": roleValues.reverse[role],
+        "role":role,
         "isPrivate": isPrivate,
         "bio": bio,
         "name": name,
@@ -98,22 +98,5 @@ class Following {
     };
 }
 
-enum Role {
-    USER
-}
 
-final roleValues = EnumValues({
-    "User": Role.USER
-});
 
-class EnumValues<T> {
-    Map<String, T> map;
-    late Map<T, String> reverseMap;
-
-    EnumValues(this.map);
-
-    Map<T, String> get reverse {
-        reverseMap = map.map((k, v) => MapEntry(v, k));
-        return reverseMap;
-    }
-}

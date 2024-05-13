@@ -113,7 +113,9 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
 import 'package:social_media_app/presentation/bloc/search_bloc/search_user_bloc.dart';
+import 'package:social_media_app/presentation/screens/profile_screen/profile_screen.dart';
 import 'package:social_media_app/presentation/screens/search_screen/widgets/debouncer.dart';
+import 'package:social_media_app/presentation/widgets/custom_navigator.dart';
 import 'package:social_media_app/presentation/widgets/custom_round_image.dart';
 
 class SearchIdle extends StatefulWidget {
@@ -138,10 +140,14 @@ class _SearchIdleState extends State<SearchIdle> {
                 SliverAppBar(
                   floating: true,
                   snap: true,
-                  leading: IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
+                  leading: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: kpurpleColor,
+                      )),
                   title: CupertinoSearchTextField(
                     controller: searchcontroller,
                     backgroundColor: kpurpleMediumColor.withOpacity(0.4),
@@ -177,55 +183,54 @@ class _SearchIdleState extends State<SearchIdle> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8.0, vertical: 5),
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                borderRadius: kradius10,
-                                color: kpurpledoublelightColor),
-                            child: Row(
-                              children: [
-                                CustomRoundImage(
-                                    circleContainerSize: 60,
-                                    imageUrl:
-                                        state.searchuser[index].profilePic),
-                                kwidth,
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        state.searchuser[index].userName,
-                                        style: const TextStyle(
-                                            color: kpurpleColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      ),
-                                      Text(state.searchuser[index].bio ?? '',
+                          child: GestureDetector(
+                            onTap: () {
+                              navigatePush(
+                                  context,
+                                  ScreenProfile(
+                                      id: state.searchuser[index].id,
+                                      backgroundimage: state
+                                          .searchuser[index].backGroundImage,
+                                      profilepic:
+                                          state.searchuser[index].profilePic,
+                                      username:
+                                          state.searchuser[index].userName));
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  borderRadius: kradius10,
+                                  color: kpurpledoublelightColor),
+                              child: Row(
+                                children: [
+                                  CustomRoundImage(
+                                      circleContainerSize: 60,
+                                      imageUrl:
+                                          state.searchuser[index].profilePic),
+                                  kwidth,
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          state.searchuser[index].userName,
                                           style: const TextStyle(
                                               color: kpurpleColor,
-                                              fontWeight: FontWeight.w400,
+                                              fontWeight: FontWeight.bold,
                                               fontSize: 16),
-                                          overflow: TextOverflow.ellipsis),
-                                    ],
+                                        ),
+                                        Text(state.searchuser[index].bio ?? '',
+                                            style: const TextStyle(
+                                                color: kpurpleColor,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16),
+                                            overflow: TextOverflow.ellipsis),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    // Action for follow button
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: kpurpledoublelightColor,
-                                      shape: const ContinuousRectangleBorder(),
-                                      side: const BorderSide(
-                                          color: kpurpleBorderColor, width: 1)),
-                                  child: const Text(
-                                    'Follow',
-                                    style: TextStyle(fontSize: 13),
-                                  ),
-                                ),
-                                kwidth
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );

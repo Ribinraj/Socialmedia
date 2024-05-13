@@ -273,7 +273,7 @@ class UserId {
     String id;
     String userName;
     String email;
-    String password;
+    String? password;
     String profilePic;
     String phone;
     bool online;
@@ -292,7 +292,7 @@ class UserId {
         required this.id,
         required this.userName,
         required this.email,
-        required this.password,
+       
         required this.profilePic,
         required this.phone,
         required this.online,
@@ -306,6 +306,7 @@ class UserId {
         required this.v,
         required this.bio,
         required this.name,
+         this.password,
     });
 
     factory UserId.fromJson(Map<String, dynamic> json) => UserId(

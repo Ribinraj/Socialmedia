@@ -38,7 +38,7 @@ class PostRepo {
     final token = await getUserToken();
     try {
       var respose = await client.get(
-          Uri.parse('$baseurl$followersposturl?page=$n&pageSize=5'),
+          Uri.parse('$baseurl$followersposturl?page=$n&pageSize=10'),
           headers: {
             'content_Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -502,8 +502,9 @@ class PostRepo {
       return 'failed';
     }
   }
+
   //fetchfollowers
-    static Future fetchfollowers() async {
+  static Future fetchfollowers() async {
     var client = http.Client();
     final token = await getUserToken();
     try {
@@ -520,6 +521,7 @@ class PostRepo {
       return 'failed';
     }
   }
+
 //fetchfollowing
   static Future fetchfollowing() async {
     var client = http.Client();
@@ -538,6 +540,7 @@ class PostRepo {
       return 'failed';
     }
   }
+
 //fetchexplorepost
   static Future fetchexplorepost() async {
     var client = http.Client();
@@ -556,16 +559,17 @@ class PostRepo {
       return 'failed';
     }
   }
+
   //searchusers
-    static Future searchusers({required String searchquery}) async {
+  static Future searchusers({required String searchquery}) async {
     var client = http.Client();
     final token = await getUserToken();
     try {
-      var respose = await client.get(Uri.parse('$baseurl$searchusersurl$searchquery'),
-          headers: {
-            'content_Type': 'application/json',
-            'Authorization': 'Bearer $token'
-          });
+      var respose = await client
+          .get(Uri.parse('$baseurl$searchusersurl$searchquery'), headers: {
+        'content_Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      });
       debugPrint('statuscode:${respose.statusCode}');
       return respose;
     } catch (e) {

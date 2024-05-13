@@ -3,14 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
-
-
+import 'package:social_media_app/presentation/bloc/connection_count/connection_count_bloc.dart';
 import 'package:social_media_app/presentation/bloc/fetchuserpost/fetching_user_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/follow_unfollow/follow_unfollow_bloc.dart';
-import 'package:social_media_app/presentation/bloc/suggession_bloc/suggession_users_bloc.dart';
+import 'package:social_media_app/presentation/screens/profile_screen/widgets/follow_and_message_card.dart';
 
-import 'package:social_media_app/presentation/widgets/custom_profile_button.dart';
-import 'package:social_media_app/presentation/widgets/tex.dart';
+import 'package:social_media_app/presentation/screens/user_post/sreen_userpost.dart';
+import 'package:social_media_app/presentation/widgets/custom_navigator.dart';
+
+import 'package:social_media_app/presentation/widgets/profilepic_section.dart';
+
 
 class ScreenProfile extends StatefulWidget {
   final String id;
@@ -18,7 +20,13 @@ class ScreenProfile extends StatefulWidget {
   final String profilepic;
   final String username;
   final String? bio;
-  const ScreenProfile({super.key,  required this.id, required this.backgroundimage, required this.profilepic, required this.username, this.bio});
+  const ScreenProfile(
+      {super.key,
+      required this.id,
+      required this.backgroundimage,
+      required this.profilepic,
+      required this.username,
+      this.bio});
 
   @override
   State<ScreenProfile> createState() => _ScreenProfileState();
@@ -33,6 +41,9 @@ class _ScreenProfileState extends State<ScreenProfile> {
     context
         .read<FollowUnfollowBloc>()
         .add(IsfollowingInitialEvent(userId: widget.id));
+    context
+        .read<ConnectionCountBloc>()
+        .add(ConnectionCountInitialEvent(userId: widget.id));
     super.initState();
   }
 
@@ -54,163 +65,38 @@ class _ScreenProfileState extends State<ScreenProfile> {
                     height: 430,
                     width: double.infinity,
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 250,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(widget.backgroundimage),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 200.0,
-                    left: 0.0,
-                    right: 0.0,
-                    child: Container(
-                      height: 230,
-                      decoration: const BoxDecoration(
-                        color: kpurplelightColor,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(30),
-                          topLeft: Radius.circular(30),
+                  Stack(children: [
+                    Container(
+                      width: double.infinity,
+                      height: 250,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(widget.backgroundimage),
                         ),
                       ),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 35, right: 35, top: 15, bottom: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Column(
-                                    children: [
-                                      customHeadingtext('100K ', 17,
-                                          textColor: kblackColor,
-                                          fontWeight: FontWeight.bold),
-                                      customHeadingtext('Followers', 15,
-                                          fontWeight: FontWeight.w400,
-                                          textColor: kblackColor)
-                                    ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Column(
-                                    children: [
-                                      customHeadingtext('100K', 17,
-                                          textColor: kblackColor,
-                                          fontWeight: FontWeight.bold),
-                                      customHeadingtext('Following', 15,
-                                          fontWeight: FontWeight.w400,
-                                          textColor: kblackColor)
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          customHeadingtext(widget.username, 22,
-                              textColor: kblackColor,
-                              fontWeight: FontWeight.w500),
-                          customHeadingtext(widget.bio ?? '', 17,
-                              textColor: kblackColor),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              BlocConsumer<FollowUnfollowBloc,
-                                  FollowUnfollowState>(
-                                listener: (context, state) {
-                                  if (state is FollowuserSuccessState) {
-                                    context.read<FollowUnfollowBloc>().add(
-                                        IsfollowingInitialEvent(
-                                            userId: widget.id));
-                                    context
-                                        .read<SuggessionUsersBloc>()
-                                        .add(SuggessionUsersInitialEvent());
-                                  } else if (state
-                                      is UnfollowuserSuccessState) {
-                                    context.read<FollowUnfollowBloc>().add(
-                                        IsfollowingInitialEvent(
-                                            userId: widget.id));
-                                    context
-                                        .read<SuggessionUsersBloc>()
-                                        .add(SuggessionUsersInitialEvent());
-                                  }
-                                },
-                                builder: (context, state) {
-                                  if (state is IsfollowingSuccessState) {
-                                    bool isfollowing = state.isfollowing;
-                                    return CustomProfilebutton(
-                                        onPressed: () {
-                                          if (isfollowing == false) {
-                                            isfollowing = true;
-                                            followUnfollow.add(
-                                                FollowButtonClickEvent(
-                                                    followeeId:
-                                                        widget.id));
-                                          } else {
-                                            isfollowing = false;
-                                            followUnfollow.add(
-                                                UnFollowButtonClickEvent(
-                                                    unfolloweeId:
-                                                        widget.id));
-                                          }
-                                        },
-                                        buttonText: isfollowing == false
-                                            ? 'Follow'
-                                            : 'Unfollow');
-                                  } else {
-                                    return CustomProfilebutton(
-                                        onPressed: () {}, buttonText: '');
-                                  }
-                                },
-                              ),
-                              kwidth20,
-                              CustomProfilebutton(
-                                  onPressed: () {}, buttonText: 'Message')
-                            ],
-                          ),
-                          kheight,
-                          customHeadingtext('All Posts', 20,
-                              textColor: kblackColor,
-                              fontWeight: FontWeight.w500)
-                        ],
-                      ),
                     ),
-                  ),
-                  Positioned(
-                    top: 140,
-                    left: (size.width - circleContainerSize) / 2,
-                    child: Container(
-                      height: circleContainerSize,
-                      width: circleContainerSize,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      child: UnconstrainedBox(
-                        child: ClipOval(
+                    Positioned(
+                      top: 50,
+                      left: 25,
+                      child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
                           child: Container(
-                            height: circleContainerSize - 10,
-                            width: circleContainerSize - 10,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                  widget.profilepic,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                              decoration: BoxDecoration(
+                                  borderRadius: kradius10, color: kwhiteColor),
+                              height: 30,
+                              width: 40,
+                              child: const Icon(
+                                  Icons.arrow_back_ios_new_rounded))),
+                    )
+                  ]),
+                  FollowAndMessageCard(widget: widget, followUnfollow: followUnfollow),
+                  ProfilePicSection(
+                      size: size,
+                      circleContainerSize: circleContainerSize,
+                      profilepic: widget.profilepic)
                 ],
               ),
               BlocBuilder<FetchingUserPostBloc, FetchingUserPostState>(
@@ -232,11 +118,22 @@ class _ScreenProfileState extends State<ScreenProfile> {
                       shrinkWrap: true,
                       itemCount: state.userposts.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(state.userposts[index].image),
+                        return InkWell(
+                          onTap: () {
+                            navigatePush(
+                                context,
+                                SreenUserPost(
+                                  userId: state.userposts[index].userId.id,
+                                  initialindex: index,
+                                ));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image:
+                                    NetworkImage(state.userposts[index].image),
+                              ),
                             ),
                           ),
                         );
@@ -254,3 +151,4 @@ class _ScreenProfileState extends State<ScreenProfile> {
     );
   }
 }
+

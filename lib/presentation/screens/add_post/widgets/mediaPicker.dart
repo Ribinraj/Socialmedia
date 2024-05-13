@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
@@ -124,7 +125,7 @@ class _MediaPickerState extends State<MediaPicker> {
                 isOriginal: false,
                 thumbnailSize: const ThumbnailSize.square(250),
                 fit: BoxFit.cover,
-                // ignore: avoid_types_as_parameter_names
+                // ignore: avoid_types_as_parameter_names, non_constant_identifier_names
                 errorBuilder: (context, error, StackTrace) {
                   return const Center(
                     child: Icon(

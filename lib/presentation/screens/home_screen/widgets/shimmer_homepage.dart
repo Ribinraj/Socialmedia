@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
-import 'package:social_media_app/presentation/widgets/tex.dart';
+
+import 'package:social_media_app/presentation/widgets/titlelogo.dart';
 
 class Screenhomeshimmer extends StatelessWidget {
   const Screenhomeshimmer({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class Screenhomeshimmer extends StatelessWidget {
           headerSliverBuilder: (context, bool isScrolled) {
             return [
               SliverAppBar(
-                backgroundColor: kpurpledoublelightColor,
+                backgroundColor: kpurpleColor,
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -29,15 +30,14 @@ class Screenhomeshimmer extends StatelessWidget {
                         radius: 27,
                       ),
                     ),
-                    customHeadingtext('Junction', 25,
-                        fontWeight: FontWeight.w800, textColor: kpurpleColor),
+                    titlelogo(),
                     Row(
                       children: [
                         IconButton(
                           onPressed: () {},
                           icon: const Icon(
                             Icons.chat_outlined,
-                            color: kpurpleColor,
+                            color: kwhiteColor,
                           ),
                         ),
                         IconButton(
@@ -219,7 +219,10 @@ class Screenhomeshimmer extends StatelessWidget {
                                 kwidth,
                                 IconButton(
                                     onPressed: () {},
-                                    icon: const Icon(Icons.comment,color: kpurpleMediumColor,)),
+                                    icon: const Icon(
+                                      Icons.comment,
+                                      color: kpurpleMediumColor,
+                                    )),
                               ],
                             )
                           ],

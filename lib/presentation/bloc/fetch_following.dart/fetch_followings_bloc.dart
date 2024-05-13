@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:bloc/bloc.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
-import 'package:meta/meta.dart';
+
 import 'package:social_media_app/data/models/following_model.dart';
 import 'package:social_media_app/domain/repository/post_repo.dart';
 

@@ -1,4 +1,4 @@
-String baseurl = 'https://lhsddvpw-7002.inc1.devtunnels.ms/api';
+String baseurl = 'https://hyperedge.online/api';
 //signup
 String signup = '/users/send-otp';
 String otpurl = '/users/verify-otp';
@@ -21,6 +21,7 @@ String reportposturl = '/posts/report-post';
 String savedposturl = '/posts/savePosts';
 String exploreposturl = '/posts/exploreposts';
 //users
+String connectioncounturl = '/users/get-count';
 String loginuserurl = '/users/getuser';
 String editprofileurl = '/users/edit-profile';
 String suggessionurl = '/users/fetch-users';
@@ -30,3 +31,10 @@ String isfollowingurl = '/users/isFollowing';
 String fetchfollowingurl = '/users/fetch-following';
 String fetchfollowersurl = '/users/fetch-followers';
 String searchusersurl = '/users/searchallusers?searchQuery=';
+String getSingleuserurl = '/users/get-single-user';
+String notificationurl = '/users/notifications';
+//chats
+String getconversationurl = '/chats/conversation';
+String createconversationurl = '/chats/conversation';
+String addmessageurl = '/chats/message';
+String getallmessageurl = '/chats/message';
