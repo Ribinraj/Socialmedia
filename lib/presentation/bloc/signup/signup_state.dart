@@ -9,4 +9,5 @@ final class SignupSuccessState extends SignupState{}
 final class SignupErrorState extends SignupState{}
 final class SignupErrorStateAlreadyAccount extends SignupState{} 
 final class SignupErrorStateOtpalreadySent extends SignupState{}
+final class SignupErrorStateUsernamealreadyUsed extends SignupState{}
 final class SignupErrorStateInternalServerError extends SignupState{}

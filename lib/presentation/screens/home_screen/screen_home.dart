@@ -42,13 +42,13 @@ class _ScreenHomeState extends State<ScreenHome> {
 
   @override
   void initState() {
+    super.initState();
     context
         .read<FetchFollowerspostBloc>()
         .add(InitialFetchingEventFollowersPost(n: currentPage));
     context.read<SuggessionUsersBloc>().add(SuggessionUsersInitialEvent());
     getloginuserId();
     SocketService().connectSocket();
-    super.initState();
   }
 
   getloginuserId() async {
@@ -74,7 +74,6 @@ class _ScreenHomeState extends State<ScreenHome> {
     Size size = MediaQuery.of(context).size;
     const double circleContainerSize = 70;
     return SafeArea(
-      
       child: Scaffold(
         body: BlocConsumer<FetchFollowerspostBloc, FetchFollowerspostState>(
           listener: (context, state) {
@@ -119,31 +118,41 @@ class _ScreenHomeState extends State<ScreenHome> {
                             },
                           ),
                         ),
-                        ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(height: 10),
-                          itemCount: state.followersposts.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == state.followersposts.length) {
-                              return Visibility(
-                                visible: state.followersposts.length % 5 == 0,
-                                child: TextButton(
-                                  onPressed: _loadMore,
-                                  child: const Text('Load More'),
+                        state.followersposts.isEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.all(50),
+                                child: Center(
+                                  child: customHeadingtext(
+                                      'No posts..\nFollow users', 20,
+                                      textColor: kpurpleColor),
                                 ),
-                              );
-                            } else {
-                              return PostSection(
-                                  index: index,
-                                  state: state,
-                                  savedbloc: savedbloc,
-                                  size: size,
-                                  likebloc: likebloc);
-                            }
-                          },
-                        ),
+                              )
+                            : ListView.separated(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(height: 10),
+                                itemCount: state.followersposts.length + 1,
+                                itemBuilder: (context, index) {
+                                  if (index == state.followersposts.length) {
+                                    return Visibility(
+                                      visible:
+                                          state.followersposts.length % 5 == 0,
+                                      child: TextButton(
+                                        onPressed: _loadMore,
+                                        child: const Text('Load More'),
+                                      ),
+                                    );
+                                  } else {
+                                    return PostSection(
+                                        index: index,
+                                        state: state,
+                                        savedbloc: savedbloc,
+                                        size: size,
+                                        likebloc: likebloc);
+                                  }
+                                },
+                              ),
                       ],
                     ),
                   ),

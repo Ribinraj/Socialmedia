@@ -86,7 +86,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                         fontWeight: FontWeight.bold)),
                                 Text(
                                   notification.message,
-                                  style: TextStyle(color: kblackColor),
+                                  style: const TextStyle(color: kblackColor),
                                 ),
                               ],
                             ),

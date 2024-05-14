@@ -7,12 +7,10 @@ import 'package:social_media_app/presentation/bloc/connection_count/connection_c
 import 'package:social_media_app/presentation/bloc/fetchuserpost/fetching_user_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/follow_unfollow/follow_unfollow_bloc.dart';
 import 'package:social_media_app/presentation/screens/profile_screen/widgets/follow_and_message_card.dart';
-
 import 'package:social_media_app/presentation/screens/user_post/sreen_userpost.dart';
 import 'package:social_media_app/presentation/widgets/custom_navigator.dart';
-
 import 'package:social_media_app/presentation/widgets/profilepic_section.dart';
-
+import 'package:social_media_app/presentation/widgets/tex.dart';
 
 class ScreenProfile extends StatefulWidget {
   final String id;
@@ -92,7 +90,8 @@ class _ScreenProfileState extends State<ScreenProfile> {
                                   Icons.arrow_back_ios_new_rounded))),
                     )
                   ]),
-                  FollowAndMessageCard(widget: widget, followUnfollow: followUnfollow),
+                  FollowAndMessageCard(
+                      widget: widget, followUnfollow: followUnfollow),
                   ProfilePicSection(
                       size: size,
                       circleContainerSize: circleContainerSize,
@@ -106,7 +105,11 @@ class _ScreenProfileState extends State<ScreenProfile> {
                         child: LoadingAnimationWidget.fourRotatingDots(
                             color: kpurpleMediumColor, size: 40));
                   } else if (state is FetchUserPostSuccessState) {
-                    return GridView.builder(
+                    return state.userposts.isEmpty
+                ? Center(
+                    child:
+                        customtext('No Posts', 20, textColor: kpurpleColor),
+                  ): GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -151,4 +154,3 @@ class _ScreenProfileState extends State<ScreenProfile> {
     );
   }
 }
-

@@ -26,7 +26,7 @@ class FavouriteSection extends StatelessWidget {
         if (state.followersposts[index].isLiked == false) {
           state.followersposts[index].isLiked = true;
           state.followersposts[index].likes
-              .add(UserId(id:loginuserdata.id, userName:loginuserdata.userName, email: loginuserdata.email, password:'', profilePic:loginuserdata.profilePic, phone:loginuserdata.phone, online:loginuserdata.online, blocked:loginuserdata.blocked, verified: loginuserdata.verified, createdAt:loginuserdata.createdAt, updatedAt:loginuserdata.updatedAt, v: loginuserdata.v, isPrivate:loginuserdata.isPrivate, role:loginuserdata.role, backGroundImage:loginuserdata.backGroundImage));
+              .add(UserId(id:loginuserdata.id, userName:loginuserdata.userName, email: loginuserdata.email, password:'', profilePic:loginuserdata.profilePic, phone:loginuserdata.phone, online:loginuserdata.online, blocked:loginuserdata.blocked, verified: loginuserdata.verified, createdAt:loginuserdata.createdAt, updatedAt:loginuserdata.updatedAt, v:1, isPrivate:loginuserdata.isPrivate, role:loginuserdata.role, backGroundImage:loginuserdata.backGroundImage));
          
           likebloc.add(LikepostEvent(postid: state.followersposts[index].id));
         } else {

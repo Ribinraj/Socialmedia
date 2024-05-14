@@ -50,6 +50,9 @@ class _ScreenSignupState extends State<ScreenSignup> {
             customSnackbar(context, 'Otp send Successfully', kgreencolor);
           } else if (state is SignupErrorStateAlreadyAccount) {
             customSnackbar(context, 'Already have an Account', kredcolor);
+          }
+          else if (state is SignupErrorStateUsernamealreadyUsed) {
+            customSnackbar(context, 'Already have an Same Username', kredcolor);
           } else if (state is SignupErrorStateOtpalreadySent) {
             customSnackbar(context, 'Already otp sent', kredcolor);
           } else if (state is SignupErrorStateInternalServerError) {

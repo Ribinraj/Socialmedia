@@ -8,7 +8,7 @@ final class LoginUserInitial extends LoginUserState {}
 final class LoginUserLoadingState extends LoginUserState {}
 
 final class LoginUserSuccessState extends LoginUserState {
-  final Loginuser loginuserdata;
+  final LoginUserModel loginuserdata;
 
   LoginUserSuccessState({required this.loginuserdata});
 }

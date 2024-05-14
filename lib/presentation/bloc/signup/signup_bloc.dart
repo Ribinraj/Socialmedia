@@ -28,7 +28,9 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       emit(SignupErrorStateAlreadyAccount());
     } else if (response == 'OTP already sent within the last one minute') {
       emit(SignupErrorStateOtpalreadySent());
-    } else if (response == 'Internal server Error') {
+    }else if (response == 'The username is already taken.') {
+      emit(SignupErrorStateUsernamealreadyUsed());
+    }  else if (response == 'Internal server Error') {
       emit(SignupErrorStateInternalServerError());
     } else {
       emit(SignupErrorState());

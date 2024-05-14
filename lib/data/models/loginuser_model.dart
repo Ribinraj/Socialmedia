@@ -1,153 +1,56 @@
-// class Loginuser {
-//   String id;
-//   String userName;
-//   String email;
-//   String password;
-//   String profilePic;
-//   String backGroundImage;
-//   String phone;
-//   bool online;
-//   bool blocked;
-//   bool verified;
-//   String role;
-//   bool isPrivate;
-//   DateTime createdAt;
-//   DateTime updatedAt;
-//   int v;
-//   String bio;
-//   String name;
-//   Loginuser({
-//     required this.id,
-//     required this.userName,
-//     required this.email,
-//     required this.password,
-//     required this.profilePic,
-//     required this.backGroundImage,
-//     required this.phone,
-//     required this.online,
-//     required this.blocked,
-//     required this.verified,
-//     required this.role,
-//     required this.isPrivate,
-//     required this.createdAt,
-//     required this.updatedAt,
-//     required this.v,
-//     required this.bio,
-//     required this.name,
-//   });
+class LoginUserModel {
+  final String id;
+  final String userName;
+  final String email;
+  final String phone;
+  final bool online;
+  final bool blocked;
+  final bool verified;
+  final String role;
+  final bool isPrivate;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String? bio;
+  final String? name;
+  final String profilePic;
+  final String backGroundImage;
 
-//   factory Loginuser.fromJson(Map<String, dynamic> json) => Loginuser(
-//         id: json["_id"],
-//         userName: json["userName"],
-//         email: json["email"],
-//         password: json["password"],
-//         profilePic: json["profilePic"],
-//         backGroundImage: json["backGroundImage"],
-//         phone: json["phone"],
-//         online: json["online"],
-//         blocked: json["blocked"],
-//         verified: json["verified"],
-//         role: json["role"],
-//         isPrivate: json["isPrivate"],
-//         createdAt: DateTime.parse(json["createdAt"]),
-//         updatedAt: DateTime.parse(json["updatedAt"]),
-//         v: json["__v"],
-//         bio: json["bio"],
-//         name: json["name"],
-//       );
+ LoginUserModel({
+    required this.id,
+    required this.userName,
+    required this.email,
+    required this.phone,
+    required this.online,
+    required this.blocked,
+    required this.verified,
+    required this.role,
+    required this.isPrivate,
+    required this.createdAt,
+    required this.updatedAt,
+     this.bio,
+    this.name,
+    required this.profilePic,
+    required this.backGroundImage,
+  });
 
-//   Map<String, dynamic> toJson() => {
-//         "_id": id,
-//         "userName": userName,
-//         "email": email,
-//         "password": password,
-//         "profilePic": profilePic,
-//         "backGroundImage":backGroundImage,
-//         "phone": phone,
-//         "online": online,
-//         "blocked": blocked,
-//         "verified": verified,
-//         "role": role,
-//         "isPrivate": isPrivate,
-//         "createdAt": createdAt.toIso8601String(),
-//         "updatedAt": updatedAt.toIso8601String(),
-//         "__v": v,
-//         "bio": bio,
-//         "name": name,
-//       };
-// }
-class Loginuser {
-    String id;
-    String userName;
-    String email;
-    String phone;
-    bool online;
-    bool blocked;
-    bool verified;
-    String role;
-    bool isPrivate;
-    DateTime createdAt;
-    DateTime updatedAt;
-    int v;
-    String bio;
-    String name;
-    String profilePic;
-    String backGroundImage;
-
-    Loginuser({
-        required this.id,
-        required this.userName,
-        required this.email,
-        required this.phone,
-        required this.online,
-        required this.blocked,
-        required this.verified,
-        required this.role,
-        required this.isPrivate,
-        required this.createdAt,
-        required this.updatedAt,
-        required this.v,
-        required this.bio,
-        required this.name,
-        required this.profilePic,
-        required this.backGroundImage,
-    });
-
-    factory Loginuser.fromJson(Map<String, dynamic> json) => Loginuser(
-        id: json["_id"],
-        userName: json["userName"],
-        email: json["email"],
-        phone: json["phone"],
-        online: json["online"],
-        blocked: json["blocked"],
-        verified: json["verified"],
-        role: json["role"],
-        isPrivate: json["isPrivate"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        v: json["__v"],
-        bio: json["bio"],
-        name: json["name"],
-        profilePic: json["profilePic"],
-        backGroundImage: json["backGroundImage"],
+  factory LoginUserModel.fromJson(Map<String, dynamic> json) {
+    return LoginUserModel(
+      id: json['_id'],
+      userName: json['userName'],
+      email: json['email'],
+      phone: json['phone'],
+      online: json['online'],
+      blocked: json['blocked'],
+      verified: json['verified'],
+      role: json['role'],
+      isPrivate: json['isPrivate'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+      bio: json['bio'],
+      name: json['name'],
+      profilePic: json['profilePic'],
+      backGroundImage: json['backGroundImage'],
     );
-
-    Map<String, dynamic> toJson() => {
-        "_id": id,
-        "userName": userName,
-        "email": email,
-        "phone": phone,
-        "online": online,
-        "blocked": blocked,
-        "verified": verified,
-        "role": role,
-        "isPrivate": isPrivate,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "__v": v,
-        "bio": bio,
-        "name": name,
-        "profilePic": profilePic,
-        "backGroundImage": backGroundImage,
-    };
+  }
 }
+

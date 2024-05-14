@@ -72,7 +72,12 @@ class _ScreenSettingsState extends State<ScreenSettings> {
                   showAlertDialog(context);
                 },
                 icon: Icons.logout_sharp,
-                text: 'Logout')
+                text: 'Logout'),
+            kheight50,
+            const Text(
+              'version:2.0',
+              style: TextStyle(color: kgreycolor),
+            )
           ],
         ),
       ),

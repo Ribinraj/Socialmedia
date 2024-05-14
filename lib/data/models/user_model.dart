@@ -2,7 +2,7 @@ class UserId {
     String id;
     String userName;
     String email;
-    String password;
+    String? password;
     String profilePic;
     String phone;
     bool online;
@@ -12,13 +12,13 @@ class UserId {
     bool isPrivate;
     DateTime createdAt;
     DateTime updatedAt;
-    int v;
+    int? v;
 
     UserId({
         required this.id,
         required this.userName,
         required this.email,
-        required this.password,
+         this.password,
         required this.profilePic,
         required this.phone,
         required this.online,
@@ -28,7 +28,7 @@ class UserId {
         required this.isPrivate,
         required this.createdAt,
         required this.updatedAt,
-        required this.v,
+        this.v,
     });
 
     factory UserId.fromJson(Map<String, dynamic> json) => UserId(

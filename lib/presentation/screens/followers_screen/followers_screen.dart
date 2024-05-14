@@ -68,7 +68,8 @@ class FollowersScreenState extends State<FollowersScreen> {
           } else if (state1 is FetchFollowersSuccessState &&
               state2 is FetchFollowingSuccessState) {
             followers = state1.followers.followers;
-            return ListView.builder(
+            return
+            followers.isEmpty?Center(child: customtext('No followers',20,textColor: kpurpleColor),): ListView.builder(
               itemCount: followers.length,
               itemBuilder: (context, index) {
            

@@ -6,7 +6,7 @@ import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
 import 'package:social_media_app/presentation/bloc/addpost/add_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/fetchpost/fetch_post_bloc.dart';
-import 'package:social_media_app/presentation/screens/add_post/widgets/mediaPicker.dart';
+import 'package:social_media_app/presentation/screens/add_post/widgets/mediapicker.dart';
 import 'package:social_media_app/presentation/screens/add_post/widgets/pageview.dart';
 import 'package:social_media_app/presentation/screens/add_post/widgets/post_textfield.dart';
 import 'package:social_media_app/presentation/screens/main_page/screen_main_page.dart';

@@ -20,7 +20,7 @@ import 'package:social_media_app/presentation/widgets/custom_snakbar.dart';
 
 
 class SreenProfileEdit extends StatefulWidget {
-  final Loginuser loginuser;
+  final LoginUserModel loginuser;
   const SreenProfileEdit({super.key, required this.loginuser});
 
   @override

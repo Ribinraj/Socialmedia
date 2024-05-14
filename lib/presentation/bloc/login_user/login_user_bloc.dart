@@ -1,8 +1,9 @@
 import 'dart:async';
-
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:social_media_app/data/models/loginuser_model.dart';
 import 'package:social_media_app/domain/repository/user_repo.dart';
 
@@ -18,13 +19,14 @@ class LoginUserBloc extends Bloc<LoginUserEvent, LoginUserState> {
   FutureOr<void> loginuserfechingevent(
       LoginUserInitialFetchingEvent event, Emitter<LoginUserState> emit) async {
     emit(LoginUserLoadingState());
-    final response = await LoginUserRepo.fetchloginuser();
-    if (response != null) {
-      emit(LoginUserSuccessState(loginuserdata: response));
-    } else if (response == null) {
-      emit(LoginUserErrorStateInternalServerError());
+    final Response response = await LoginUserRepo.fetchloginuser();
+    debugPrint('loginuser:${response.body}');
+    if (response.statusCode == 200) {
+      final responsebody = jsonDecode(response.body);
+      final LoginUserModel user = LoginUserModel.fromJson(responsebody);
+      emit(LoginUserSuccessState(loginuserdata: user));
     } else {
-      emit(LOginUserErrorState());
+      emit(LoginUserErrorStateInternalServerError());
     }
   }
 }

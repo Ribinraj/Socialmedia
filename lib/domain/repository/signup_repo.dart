@@ -24,7 +24,12 @@ class SignupRepo {
       } else if (responseBody['message'] ==
           "OTP already sent within the last one minute") {
         return 'OTP already sent within the last one minute';
-      } else if (response.statusCode == 500) {
+      }
+        else if (responseBody['message'] ==
+          "The username is already taken.") {
+        return 'The username is already taken.';
+      }
+       else if (response.statusCode == 500) {
         return 'Internal server Error';
       } else {
         return ' failed';

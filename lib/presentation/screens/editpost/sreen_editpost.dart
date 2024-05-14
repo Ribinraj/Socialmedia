@@ -10,7 +10,7 @@ import 'package:social_media_app/data/models/post_model.dart';
 import 'package:social_media_app/presentation/bloc/editbloc/edit_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/fetchpost/fetch_post_bloc.dart';
 
-import 'package:social_media_app/presentation/screens/add_post/widgets/mediaPicker.dart';
+import 'package:social_media_app/presentation/screens/add_post/widgets/mediapicker.dart';
 import 'package:social_media_app/presentation/screens/add_post/widgets/post_textfield.dart';
 
 import 'package:social_media_app/presentation/widgets/custom_signin_button.dart';

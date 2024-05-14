@@ -46,7 +46,7 @@ class AppbarSection extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  navigatePush(context, NotificationPage());
+                  navigatePush(context, const NotificationPage());
                 },
                 icon: const Icon(
                   Icons.notifications_outlined,

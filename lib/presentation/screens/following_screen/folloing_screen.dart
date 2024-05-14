@@ -71,52 +71,58 @@ class FollowingScreenState extends State<FollowingScreen> {
             );
           } else if (state1 is FetchFollowingSuccessState) {
             following = state1.followings.following;
-            return ListView.builder(
-              itemCount: following.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: InkWell(
-                    onTap: () {
-                      navigatePush(
-                          context,
-                          ScreenProfile(
-                            id: following[index].id,
-                            backgroundimage: following[index].backGroundImage,
-                            profilepic: following[index].profilePic,
-                            username: following[index].userName,
-                            bio: following[index].bio,
-                          ));
-                    },
-                    child: CustomRoundImage(
-                        circleContainerSize: 50,
-                        imageUrl: following[index].profilePic),
-                  ),
-                  title: Text(following[index].userName),
-                  trailing: SizedBox(
-                    height: 35,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        unfollow.add(UnFollowButtonClickEvent(
-                            unfolloweeId: following[index].id));
+            return following.isEmpty
+                ? Center(
+                    child:
+                        customtext('No folloings', 20, textColor: kpurpleColor),
+                  )
+                : ListView.builder(
+                    itemCount: following.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: InkWell(
+                          onTap: () {
+                            navigatePush(
+                                context,
+                                ScreenProfile(
+                                  id: following[index].id,
+                                  backgroundimage:
+                                      following[index].backGroundImage,
+                                  profilepic: following[index].profilePic,
+                                  username: following[index].userName,
+                                  bio: following[index].bio,
+                                ));
+                          },
+                          child: CustomRoundImage(
+                              circleContainerSize: 50,
+                              imageUrl: following[index].profilePic),
+                        ),
+                        title: Text(following[index].userName),
+                        trailing: SizedBox(
+                          height: 35,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              unfollow.add(UnFollowButtonClickEvent(
+                                  unfolloweeId: following[index].id));
 
-                        following.removeWhere(
-                            (element) => element.id == following[index].id);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: kpurpledoublelightColor,
-                          shape: const ContinuousRectangleBorder(),
-                          fixedSize: const Size(105, 20),
-                          side: const BorderSide(
-                              color: kpurpleBorderColor, width: 1)),
-                      child: const Text(
-                        'Unfollow',
-                        style: TextStyle(fontSize: 13),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
+                              following.removeWhere((element) =>
+                                  element.id == following[index].id);
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: kpurpledoublelightColor,
+                                shape: const ContinuousRectangleBorder(),
+                                fixedSize: const Size(105, 20),
+                                side: const BorderSide(
+                                    color: kpurpleBorderColor, width: 1)),
+                            child: const Text(
+                              'Unfollow',
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
           } else {
             return const SizedBox();
           }

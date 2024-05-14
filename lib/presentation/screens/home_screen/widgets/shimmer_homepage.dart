@@ -45,7 +45,7 @@ class Screenhomeshimmer extends StatelessWidget {
                           icon: const Icon(
                             Icons.notifications_outlined,
                             size: 28,
-                            color: kpurpleColor,
+                            color: kwhiteColor,
                           ),
                         ),
                       ],

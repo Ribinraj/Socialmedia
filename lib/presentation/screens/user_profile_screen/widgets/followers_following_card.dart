@@ -61,7 +61,7 @@ class FollowersFollowingCard extends StatelessWidget {
             ),
             customHeadingtext(state1.loginuserdata.userName, 22,
                 textColor: kblackColor, fontWeight: FontWeight.w500),
-            customHeadingtext(state1.loginuserdata.bio, 17,
+            customHeadingtext(state1.loginuserdata.bio??'', 17,
                 textColor: kblackColor),
             EditAndSettingsRow(
               state1: state1,
