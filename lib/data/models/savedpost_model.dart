@@ -285,8 +285,8 @@ class UserId {
     DateTime createdAt;
     DateTime updatedAt;
     int v;
-    String bio;
-    String name;
+    String? bio;
+    String? name;
 
     UserId({
         required this.id,
@@ -304,8 +304,8 @@ class UserId {
         required this.createdAt,
         required this.updatedAt,
         required this.v,
-        required this.bio,
-        required this.name,
+         this.bio,
+         this.name,
          this.password,
     });
 

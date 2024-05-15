@@ -60,7 +60,7 @@ class From {
   final String id;
   final String userName;
   final String email;
-  final String password;
+ String? password;
   final String? profilePic;
   final String? phone;
   final bool online;
@@ -79,7 +79,7 @@ class From {
     required this.id,
     required this.userName,
     required this.email,
-    required this.password,
+    this.password,
     this.profilePic,
     this.phone,
     required this.online,

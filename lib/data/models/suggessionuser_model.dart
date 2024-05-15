@@ -22,7 +22,7 @@ class User {
     String id;
     String userName;
     String email;
-    String password;
+    String? password;
     String profilePic;
     String phone;
     bool online;
@@ -41,7 +41,7 @@ class User {
         required this.id,
         required this.userName,
         required this.email,
-        required this.password,
+       this.password,
         required this.profilePic,
         required this.phone,
         required this.online,

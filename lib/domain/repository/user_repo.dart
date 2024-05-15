@@ -15,7 +15,7 @@ class LoginUserRepo {
   static Future fetchloginuser() async {
     var client = http.Client();
     final token = await getUserToken();
-    print('loginuser:$token');
+   
     try {
       var response = await client.get(Uri.parse('$baseurl$loginuserurl'),
           headers: {
