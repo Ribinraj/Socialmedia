@@ -39,7 +39,7 @@ class PostRepo {
     try {
       var respose = await client.get(
           Uri.parse('$baseurl$followersposturl?page=$n&pageSize=10'),
-          headers: {
+          headers: {     
             'content_Type': 'application/json',
             'Authorization': 'Bearer $token'
           });
