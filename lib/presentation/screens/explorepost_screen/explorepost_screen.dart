@@ -5,6 +5,8 @@ import 'package:multi_bloc_builder/builders/multi_bloc_builder.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
 import 'package:social_media_app/presentation/bloc/explore_post_bloc/explore_post_bloc.dart';
+import 'package:social_media_app/presentation/screens/profile_screen/profile_screen.dart';
+import 'package:social_media_app/presentation/widgets/custom_navigator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:social_media_app/presentation/bloc/like_unlikepost/like_unlike_post_bloc.dart';
 import 'package:social_media_app/presentation/bloc/login_user/login_user_bloc.dart';
@@ -58,7 +60,7 @@ class _SreenSavedPostState extends State<ScreenExplorePost> {
               separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemCount: state.exploreposts.length,
               itemBuilder: (context, index) {
-                final exlorepost = state.exploreposts[index];
+                final explorepost = state.exploreposts[index];
                 return Padding(
                   padding: const EdgeInsets.all(10),
                   child: Container(
@@ -77,25 +79,32 @@ class _SreenSavedPostState extends State<ScreenExplorePost> {
                       children: [
                         Row(
                           children: [
-                            CustomRoundImage(
-                                circleContainerSize: 45,
-                                imageUrl: exlorepost.userId.profilePic),
+                            GestureDetector(
+                              onTap: () {
+                                navigatePush(context,ScreenProfile(id: explorepost.userId.id, backgroundimage: explorepost.userId.backGroundImage, profilepic:explorepost.userId.profilePic, username:explorepost.userId.userName));
+                              },
+                              child: CustomRoundImage(
+                                  circleContainerSize: 45,
+                                  imageUrl: explorepost.userId.profilePic),
+                            ),
                             kwidth,
                             Column(
                               children: [
                                 customHeadingtext(
-                                    exlorepost.userId.userName, 18,
+                                    explorepost.userId.userName, 18,
                                     textColor: kblackColor,
                                     fontWeight: FontWeight.bold),
                                 state.exploreposts[index].createdAt !=
-                state.exploreposts[index].updatedAt
-            ? customstyletext(
-                '${timeago.format(state.exploreposts[index].updatedAt)}(edited)',
-                13,
-                textColor: kgreycolor)
-            : customstyletext(
-                timeago.format(state.exploreposts[index].createdAt), 13,
-                textColor: kgreycolor),
+                                        state.exploreposts[index].updatedAt
+                                    ? customstyletext(
+                                        '${timeago.format(state.exploreposts[index].updatedAt)}(edited)',
+                                        13,
+                                        textColor: kgreycolor)
+                                    : customstyletext(
+                                        timeago.format(state
+                                            .exploreposts[index].createdAt),
+                                        13,
+                                        textColor: kgreycolor),
                               ],
                             ),
                           ],
@@ -107,7 +116,7 @@ class _SreenSavedPostState extends State<ScreenExplorePost> {
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: NetworkImage(exlorepost.image),
+                                image: NetworkImage(explorepost.image),
                               ),
                               borderRadius: kradius10),
                         ),
@@ -115,7 +124,7 @@ class _SreenSavedPostState extends State<ScreenExplorePost> {
                         SizedBox(
                           height: 50,
                           child: customHeadingtext(
-                            exlorepost.description,
+                            explorepost.description,
                             16,
                             textColor: kblackColor,
                           ),
@@ -136,17 +145,17 @@ class _SreenSavedPostState extends State<ScreenExplorePost> {
                                       state: state,
                                       index: index),
                                   customHeadingtext(
-                                      '${exlorepost.likes.length}', 15,
+                                      '${explorepost.likes.length}', 15,
                                       fontWeight: FontWeight.w500,
                                       textColor: kblackColor),
-                                  exlorepost.likes.length > 1
+                                  explorepost.likes.length > 1
                                       ? customHeadingtext('Likes', 15,
                                           textColor: kblackColor)
                                       : customHeadingtext('Like', 15,
                                           textColor: kblackColor),
                                   kwidth,
                                   CommentWidget(
-                                      state2: state2, postId: exlorepost.id),
+                                      state2: state2, postId: explorepost.id),
                                 ],
                               );
                             }

@@ -7,13 +7,18 @@ class CustomTextfield extends StatelessWidget {
     super.key,
     required this.controller,
     required this.labelText,
-     this.textInputType, this.validator,
+    this.textInputType,
+    this.validator,
+    this.suffixIcon,
+    this.obscureText,
   });
 
   final TextEditingController controller;
   final String labelText;
   final TextInputType? textInputType;
   final String? Function(String?)? validator;
+  final Widget? suffixIcon;
+  final bool? obscureText;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,12 +26,13 @@ class CustomTextfield extends StatelessWidget {
       child: TextFormField(
         validator: validator,
         controller: controller,
+        obscureText: obscureText ?? false,
         keyboardType: textInputType,
         style: const TextStyle(fontSize: 15),
         decoration: InputDecoration(
             isDense: true,
-            errorMaxLines: 1,
-         
+            errorMaxLines: 3,
+            suffixIcon: suffixIcon,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
             labelText: labelText,

@@ -44,14 +44,13 @@ class _ScreenSignupState extends State<ScreenSignup> {
               context,
               ScreenOtp(
                 email: emailController.text,
-                user: userdetails! ,
+                user: userdetails!,
               ),
             );
             customSnackbar(context, 'Otp send Successfully', kgreencolor);
           } else if (state is SignupErrorStateAlreadyAccount) {
             customSnackbar(context, 'Already have an Account', kredcolor);
-          }
-          else if (state is SignupErrorStateUsernamealreadyUsed) {
+          } else if (state is SignupErrorStateUsernamealreadyUsed) {
             customSnackbar(context, 'Already have an Same Username', kredcolor);
           } else if (state is SignupErrorStateOtpalreadySent) {
             customSnackbar(context, 'Already otp sent', kredcolor);
@@ -77,7 +76,7 @@ class _ScreenSignupState extends State<ScreenSignup> {
                   child: Container(
                     margin: const EdgeInsets.only(top: 190),
                     width: size.width * .8,
-                    height: 600,
+                    height: 630,
                     decoration: BoxDecoration(
                         color: kwhiteColor, borderRadius: kradius20),
                     child: Form(
@@ -99,7 +98,7 @@ class _ScreenSignupState extends State<ScreenSignup> {
                           CustomTextfield(
                               controller: phonenumberController,
                               labelText: 'Phone number',
-                              validator:validateMobileNumber,
+                              validator: validateMobileNumber,
                               textInputType: TextInputType.number),
                           CustomTextfield(
                               controller: emailController,
@@ -113,7 +112,7 @@ class _ScreenSignupState extends State<ScreenSignup> {
                               textInputType: TextInputType.visiblePassword),
                           CustomTextfield(
                               controller: conformpasswordController,
-                              labelText: 'Conform Password',
+                              labelText: 'Confirm Password',
                               validator: (value) {
                                 if (value == null ||
                                     value.isEmpty ||

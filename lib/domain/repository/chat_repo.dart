@@ -13,7 +13,7 @@ class ChatRopo {
     var client = http.Client();
     final token = await getUserToken();
     try {
-      var respose = await client.get(Uri.parse('$baseurl$getconversationurl'),
+      var respose = await client.get(Uri.parse('${EndPoints.baseurl}${EndPoints.getconversationurl}'),
           headers: {
             'content_Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -36,7 +36,7 @@ class ChatRopo {
       final body = {"members": members};
 
       var response = await client.post(
-        Uri.parse('$baseurl$createconversationurl'),
+        Uri.parse('${EndPoints.baseurl}${EndPoints.createconversationurl}'),
         body: jsonEncode(body),
         headers: {
           'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ class ChatRopo {
         "recieverId": recieverId
       };
       var response = await client.post(
-        Uri.parse('$baseurl$addmessageurl'),
+        Uri.parse('${EndPoints.baseurl}${EndPoints.addmessageurl}'),
         body: jsonEncode(body),
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ class ChatRopo {
     try {
       final token = await getUserToken();
       var response = client.get(
-        Uri.parse('$baseurl$getallmessageurl/$conversationId'),
+        Uri.parse('${EndPoints.baseurl}${EndPoints.getallmessageurl}/$conversationId'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'

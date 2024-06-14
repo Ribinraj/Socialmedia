@@ -16,13 +16,26 @@ String? validatePassword(String? password) {
     return 'Please enter a password.';
   }
   if (!RegExp(
-          r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$')
+          r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$')
       .hasMatch(password)) {
-    return 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.';
+    return 'Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, and one number.';
   }
 
   return null;
 }
+
+// String? validatePassword(String? password) {
+//   if (password == null || password.isEmpty) {
+//     return 'Please enter a password.';
+//   }
+//   if (!RegExp(
+//           r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$')
+//       .hasMatch(password)) {
+//     return 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.';
+//   }
+
+//   return null;
+// }
 
 //phonenumber
 String? validateMobileNumber(String? number) {

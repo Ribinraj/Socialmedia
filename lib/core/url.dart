@@ -1,40 +1,43 @@
-String baseurl = 'https://hyperedge.online/api';
+class EndPoints{
+ static const String baseurl = 'https://hyperedge.online/api';
 //signup
-String signup = '/users/send-otp';
-String otpurl = '/users/verify-otp';
-String loginurl = '/users/login';
+static const String signup = '/users/send-otp';
+static const String otpurl = '/users/verify-otp';
+static const String loginurl = '/users/login';
 //post
-String addposturl = '/posts/addPost';
-String fetchposturl = '/posts/getpost';
-String fetchuserposturl = '/posts/getuserpost';
-String deleteposturl = '/posts/delete-post';
-String editposturl = '/posts/update-post';
-String followersposturl = '/posts/allfollowingsPost';
-String postlikeurl = '/posts/like-post';
-String postunlikeurl = '/posts/unlike-post';
-String fetchcommentsurl = '/posts/fetch-comments';
-String addcommenturl = '/posts/add-comment';
-String deletecommenturl = '/posts/delete-comment';
-String saveposturl = '/posts/savePost';
-String unsaveposturl = '/posts/savePosts';
-String reportposturl = '/posts/report-post';
-String savedposturl = '/posts/savePosts';
-String exploreposturl = '/posts/exploreposts';
+static const String addposturl = '/posts/addPost';
+static const String fetchposturl = '/posts/getpost';
+static const String fetchuserposturl = '/posts/getuserpost';
+static const String deleteposturl = '/posts/delete-post';
+static const String editposturl = '/posts/update-post';
+static const String followersposturl = '/posts/allfollowingsPost';
+static const String postlikeurl = '/posts/like-post';
+static const String postunlikeurl = '/posts/unlike-post';
+static const String fetchcommentsurl = '/posts/fetch-comments';
+static const String addcommenturl = '/posts/add-comment';
+static const String deletecommenturl = '/posts/delete-comment';
+static const String saveposturl = '/posts/savePost';
+static const String unsaveposturl = '/posts/savePosts';
+static const String reportposturl = '/posts/report-post';
+static const String savedposturl = '/posts/savePosts';
+static const String exploreposturl = '/posts/exploreposts';
 //users
-String connectioncounturl = '/users/get-count';
-String loginuserurl = '/users/getuser';
-String editprofileurl = '/users/edit-profile';
-String suggessionurl = '/users/fetch-users';
-String followuserurl = '/users/follow';
-String unfollowuserurl = '/users/unfollow';
-String isfollowingurl = '/users/isFollowing';
-String fetchfollowingurl = '/users/fetch-following';
-String fetchfollowersurl = '/users/fetch-followers';
-String searchusersurl = '/users/searchallusers?searchQuery=';
-String getSingleuserurl = '/users/get-single-user';
-String notificationurl = '/users/notifications';
+static const String connectioncounturl = '/users/get-count';
+static const String loginuserurl = '/users/getuser';
+static const String editprofileurl = '/users/edit-profile';
+static const String suggessionurl = '/users/fetch-users';
+static const String followuserurl = '/users/follow';
+static const String unfollowuserurl = '/users/unfollow';
+static const String isfollowingurl = '/users/isFollowing';
+static const String fetchfollowingurl = '/users/fetch-following';
+static const String fetchfollowersurl = '/users/fetch-followers';
+static const String searchusersurl = '/users/searchallusers?searchQuery=';
+static const String getSingleuserurl = '/users/get-single-user';
+static const String notificationurl = '/users/notifications';
 //chats
-String getconversationurl = '/chats/conversation';
-String createconversationurl = '/chats/conversation';
-String addmessageurl = '/chats/message';
-String getallmessageurl = '/chats/message';
+static const String getconversationurl = '/chats/conversation';
+static const String createconversationurl = '/chats/conversation';
+static const String addmessageurl = '/chats/message';
+static const String getallmessageurl = '/chats/message';
+
+}

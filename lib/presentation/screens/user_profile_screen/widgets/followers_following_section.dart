@@ -39,7 +39,7 @@ class FollowingFollowersSection extends StatelessWidget {
           child: Column(
             children: [
               customHeadingtext(
-                  '${state2.followers.followers.length}',
+                  '${state2.followers.totalCount}',
                   17,
                   textColor:
                       kblackColor,
@@ -62,7 +62,7 @@ class FollowingFollowersSection extends StatelessWidget {
           child: Column(
             children: [
               customHeadingtext(
-                  '${state3.followings.following.length}',
+                  '${state3.followings.totalCount}',
                   17,
                   textColor:
                       kblackColor,

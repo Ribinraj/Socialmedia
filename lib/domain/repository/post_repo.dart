@@ -19,7 +19,7 @@ class PostRepo {
     final token = await getUserToken();
     try {
       var response =
-          await client.get(Uri.parse('$baseurl$fetchposturl'), headers: {
+          await client.get(Uri.parse('${EndPoints.baseurl}${EndPoints.fetchposturl}'), headers: {
         'content_Type': 'application/json',
         'Authorization': 'Bearer $token',
       });
@@ -38,7 +38,7 @@ class PostRepo {
     final token = await getUserToken();
     try {
       var respose = await client.get(
-          Uri.parse('$baseurl$followersposturl?page=$n&pageSize=10'),
+          Uri.parse('${EndPoints.baseurl}${EndPoints.followersposturl}?page=$n&pageSize=5'),
           headers: {     
             'content_Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -58,7 +58,7 @@ class PostRepo {
     // final userid = await getUserId();
     try {
       var response = await client.get(
-          Uri.parse('$baseurl$fetchuserposturl/$userid'),
+          Uri.parse('${EndPoints.baseurl}${EndPoints.fetchuserposturl}/$userid'),
           headers: {'content_Type': 'application/json'});
       debugPrint('statuscode:${response.statusCode}');
       return response;
@@ -83,7 +83,7 @@ class PostRepo {
         'userId': userId
       };
 
-      var response = await client.post(Uri.parse('$baseurl$addposturl'),
+      var response = await client.post(Uri.parse('${EndPoints.baseurl}${EndPoints.addposturl}'),
           body: jsonEncode(userpost),
           headers: {
             'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ class PostRepo {
     try {
       final token = await getUserToken();
       var response = await client
-          .delete(Uri.parse('$baseurl$deleteposturl/$postid'), headers: {
+          .delete(Uri.parse('${EndPoints.baseurl}${EndPoints.deleteposturl}/$postid'), headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
       });
@@ -152,7 +152,7 @@ class PostRepo {
         'description': description,
       };
       final token = await getUserToken();
-      var response = await client.put(Uri.parse('$baseurl$editposturl/$postid'),
+      var response = await client.put(Uri.parse('${EndPoints.baseurl}${EndPoints.editposturl}/$postid'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -180,7 +180,7 @@ class PostRepo {
     try {
       final token = await getUserToken();
       var response = await client
-          .patch(Uri.parse('$baseurl$postlikeurl/$postId'), headers: {
+          .patch(Uri.parse('${EndPoints.baseurl}${EndPoints.postlikeurl}/$postId'), headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
       });
@@ -205,7 +205,7 @@ class PostRepo {
     try {
       final token = await getUserToken();
       var response = await client
-          .patch(Uri.parse('$baseurl$postunlikeurl/$postId'), headers: {
+          .patch(Uri.parse('${EndPoints.baseurl}${EndPoints.postunlikeurl}/$postId'), headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
       });
@@ -231,7 +231,7 @@ class PostRepo {
     try {
       final token = await getUserToken();
       var response = await client
-          .get(Uri.parse('$baseurl$fetchcommentsurl/$postid'), headers: {
+          .get(Uri.parse('${EndPoints.baseurl}${EndPoints.fetchcommentsurl}/$postid'), headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
       });
@@ -263,7 +263,7 @@ class PostRepo {
       };
 
       var response = await client.post(
-          Uri.parse('$baseurl$addcommenturl/$postId'),
+          Uri.parse('${EndPoints.baseurl}${EndPoints.addcommenturl}/$postId'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -290,7 +290,7 @@ class PostRepo {
     try {
       final token = await getUserToken();
       var response = await client
-          .delete(Uri.parse('$baseurl$deletecommenturl/$commentid'), headers: {
+          .delete(Uri.parse('${EndPoints.baseurl}${EndPoints.deletecommenturl}/$commentid'), headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
       });
@@ -315,7 +315,7 @@ class PostRepo {
     try {
       final token = await getUserToken();
       var response = await client
-          .post(Uri.parse('$baseurl$saveposturl/$postId'), headers: {
+          .post(Uri.parse('${EndPoints.baseurl}${EndPoints.saveposturl}/$postId'), headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
       });
@@ -340,7 +340,7 @@ class PostRepo {
     try {
       final token = await getUserToken();
       var response = await client
-          .delete(Uri.parse('$baseurl$unsaveposturl/$postId'), headers: {
+          .delete(Uri.parse('${EndPoints.baseurl}${EndPoints.unsaveposturl}/$postId'), headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
       });
@@ -374,7 +374,7 @@ class PostRepo {
         'targetId': postId
       };
       var response = await client.post(
-          Uri.parse('$baseurl$reportposturl/$postId'),
+          Uri.parse('${EndPoints.baseurl}${EndPoints.reportposturl}/$postId'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -400,7 +400,7 @@ class PostRepo {
     var client = http.Client();
     final token = await getUserToken();
     try {
-      var respose = await client.get(Uri.parse('$baseurl$savedposturl'),
+      var respose = await client.get(Uri.parse('${EndPoints.baseurl}${EndPoints.savedposturl}'),
           headers: {
             'content_Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -419,7 +419,7 @@ class PostRepo {
     var client = http.Client();
     final token = await getUserToken();
     try {
-      var response = await client.get(Uri.parse('$baseurl$suggessionurl'),
+      var response = await client.get(Uri.parse('${EndPoints.baseurl}${EndPoints.suggessionurl}'),
           headers: {
             'content_Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -439,7 +439,7 @@ class PostRepo {
     try {
       final token = await getUserToken();
       var response = await client
-          .post(Uri.parse('$baseurl$followuserurl/$followeeId'), headers: {
+          .post(Uri.parse('${EndPoints.baseurl}${EndPoints.followuserurl}/$followeeId'), headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
       });
@@ -465,7 +465,7 @@ class PostRepo {
       final token = await getUserToken();
       debugPrint('unfolloweeid:$unfolloweeId');
       var response = await client
-          .put(Uri.parse('$baseurl$unfollowuserurl/$unfolloweeId'), headers: {
+          .put(Uri.parse('${EndPoints.baseurl}${EndPoints.unfollowuserurl}/$unfolloweeId'), headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
       });
@@ -490,7 +490,7 @@ class PostRepo {
     try {
       final token = await getUserToken();
       var response = await client
-          .get(Uri.parse('$baseurl$isfollowingurl/$userId'), headers: {
+          .get(Uri.parse('${EndPoints.baseurl}${EndPoints.isfollowingurl}/$userId'), headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
       });
@@ -508,7 +508,7 @@ class PostRepo {
     var client = http.Client();
     final token = await getUserToken();
     try {
-      var respose = await client.get(Uri.parse('$baseurl$fetchfollowersurl'),
+      var respose = await client.get(Uri.parse('${EndPoints.baseurl}${EndPoints.fetchfollowersurl}'),
           headers: {
             'content_Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -527,7 +527,7 @@ class PostRepo {
     var client = http.Client();
     final token = await getUserToken();
     try {
-      var respose = await client.get(Uri.parse('$baseurl$fetchfollowingurl'),
+      var respose = await client.get(Uri.parse('${EndPoints.baseurl}${EndPoints.fetchfollowingurl}'),
           headers: {
             'content_Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -546,7 +546,7 @@ class PostRepo {
     var client = http.Client();
     final token = await getUserToken();
     try {
-      var respose = await client.get(Uri.parse('$baseurl$exploreposturl'),
+      var respose = await client.get(Uri.parse('${EndPoints.baseurl}${EndPoints.exploreposturl}'),
           headers: {
             'content_Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -566,7 +566,7 @@ class PostRepo {
     final token = await getUserToken();
     try {
       var respose = await client
-          .get(Uri.parse('$baseurl$searchusersurl$searchquery'), headers: {
+          .get(Uri.parse('${EndPoints.baseurl}${EndPoints.searchusersurl}$searchquery'), headers: {
         'content_Type': 'application/json',
         'Authorization': 'Bearer $token'
       });

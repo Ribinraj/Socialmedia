@@ -24,7 +24,7 @@ class User {
     String email;
     String? password;
     String profilePic;
-    String phone;
+    String? phone;
     bool online;
     bool blocked;
     bool verified;
@@ -43,7 +43,7 @@ class User {
         required this.email,
        this.password,
         required this.profilePic,
-        required this.phone,
+         this.phone,
         required this.online,
         required this.blocked,
         required this.verified,

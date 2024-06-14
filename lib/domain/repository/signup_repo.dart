@@ -11,7 +11,7 @@ class SignupRepo {
   static Future<String> signupuser({required UserModel user}) async {
     var client = http.Client();
     try {
-      var response = await client.post(Uri.parse('$baseurl$signup'),
+      var response = await client.post(Uri.parse('${EndPoints.baseurl}${EndPoints.signup}'),
           body: jsonEncode(user),
           headers: {'Content-Type': 'application/json'});
       debugPrint('statuscode:${response.statusCode}');
@@ -49,7 +49,7 @@ class SignupRepo {
       final user = {'email': email, 'otp': oteepee};
 
       var response = await client.post(
-        Uri.parse('$baseurl$otpurl'),
+        Uri.parse('${EndPoints.baseurl}${EndPoints.otpurl}'),
         body: user,
       );
       debugPrint('statuscode:${response.statusCode}');
@@ -79,7 +79,7 @@ class SignupRepo {
     try {
       final loginuser = {'email': email, 'password': password};
       var response =
-          await client.post(Uri.parse('$baseurl$loginurl'), body: loginuser);
+          await client.post(Uri.parse('${EndPoints.baseurl}${EndPoints.loginurl}'), body: loginuser);
       debugPrint('statuscode:${response.statusCode}');
       debugPrint(response.body);
       final responsebody = jsonDecode(response.body);

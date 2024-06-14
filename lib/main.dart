@@ -35,6 +35,7 @@ import 'package:social_media_app/presentation/bloc/saved_post/saved_post_bloc.da
 import 'package:social_media_app/presentation/bloc/search_bloc/search_user_bloc.dart';
 import 'package:social_media_app/presentation/bloc/signup/signup_bloc.dart';
 import 'package:social_media_app/presentation/bloc/suggession_bloc/suggession_users_bloc.dart';
+import 'package:social_media_app/presentation/cubit/cubits/cubit/toggle_password_cubit.dart';
 import 'package:social_media_app/presentation/cubit/reportCubit/bottonav_cubit.dart';
 import 'package:social_media_app/presentation/screens/splash_screen/screen_splash.dart';
 
@@ -141,6 +142,9 @@ class MyApp extends StatelessWidget {
         ),
                 BlocProvider(
           create: (context) =>GetNotificationBloc(),
+        ),
+              BlocProvider(
+          create: (context) =>TogglepasswordCubit(),
         )
       ],
       child: MaterialApp(

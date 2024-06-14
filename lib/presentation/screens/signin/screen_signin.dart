@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/colors.dart';
 import 'package:social_media_app/core/constants.dart';
 import 'package:social_media_app/presentation/bloc/login/login_bloc.dart';
+import 'package:social_media_app/presentation/cubit/cubits/cubit/toggle_password_cubit.dart';
 import 'package:social_media_app/presentation/screens/forgotPassword/screen_forgotpassword.dart';
 import 'package:social_media_app/presentation/screens/main_page/screen_main_page.dart';
+import 'package:social_media_app/presentation/screens/signin/widgets/toggle_password.dart';
 
 import 'package:social_media_app/presentation/screens/signup/screen_signup.dart';
 import 'package:social_media_app/presentation/widgets/custom_navigator.dart';
@@ -64,7 +66,7 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                   child: Container(
                     margin: const EdgeInsets.only(top: 200),
                     width: size.width * .8,
-                    height: 370,
+                    height: 390,
                     decoration: BoxDecoration(
                         color: kwhiteColor, borderRadius: kradius20),
                     child: Form(
@@ -80,11 +82,17 @@ class _ScreenSignInState extends State<ScreenSignIn> {
                               validator: validateEmail,
                               textInputType: TextInputType.emailAddress),
                           kheight,
-                          CustomTextfield(
-                              controller: passwordcontroller,
-                              labelText: 'Password',
-                              validator: validatePassword,
-                              textInputType: TextInputType.visiblePassword),
+                          BlocBuilder<TogglepasswordCubit,bool>(
+                            builder: (context, state) {
+                              return CustomTextfield(
+                                  suffixIcon: togglePassword(),
+                                  obscureText: state,
+                                  controller: passwordcontroller,
+                                  labelText: 'Password',
+                                  validator: validatePassword,
+                                  textInputType: TextInputType.visiblePassword);
+                            },
+                          ),
                           GestureDetector(
                               onTap: () {
                                 Navigator.push(

@@ -17,7 +17,7 @@ class LoginUserRepo {
     final token = await getUserToken();
    
     try {
-      var response = await client.get(Uri.parse('$baseurl$loginuserurl'),
+      var response = await client.get(Uri.parse('${EndPoints.baseurl}${EndPoints.loginuserurl}'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -53,7 +53,7 @@ class LoginUserRepo {
         'backGroundImage': backgroundimageurl
       };
 
-      var response = await client.put(Uri.parse('$baseurl$editprofileurl'),
+      var response = await client.put(Uri.parse('${EndPoints.baseurl}${EndPoints.editprofileurl}'),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token'
@@ -80,7 +80,7 @@ class LoginUserRepo {
     try {
       final token = await getUserToken();
       var response = await client.get(
-        Uri.parse('$baseurl$getSingleuserurl/$userId'),
+        Uri.parse('${EndPoints.baseurl}${EndPoints. getSingleuserurl}/$userId'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'
@@ -100,7 +100,7 @@ class LoginUserRepo {
     try {
       final token = await getUserToken();
       var response = await client.get(
-        Uri.parse('$baseurl$connectioncounturl/$userId'),
+        Uri.parse('${EndPoints.baseurl}${EndPoints.connectioncounturl}/$userId'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'
@@ -120,7 +120,7 @@ class LoginUserRepo {
     try {
       final token = await getUserToken();
       var response = await client.get(
-        Uri.parse('$baseurl$notificationurl'),
+        Uri.parse('${EndPoints.baseurl}${EndPoints.notificationurl}'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'
